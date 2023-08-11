@@ -7,18 +7,17 @@
 
 ## Dependencies
 
-List any dependencies here. E.g. security-core, region-setup
+- region-setup
 
 ## Resource List
 
-Insert a high-level list of resources created as a part of this module. E.g.
+A high-level list of resources created as a part of this module.
 
-- Storage Account
-- Containers
-- Storage share
-- Lifecycle policy
-- CMK key and Iam Role Assignment
-- Monitor diagnostic setting
+- AWS Organization with org level services
+  - Guard Duty
+  - Security Hub
+  - AWS Config
+  - Cloudtrail
 
 ## Code Updates
 
@@ -40,7 +39,7 @@ terraform {
 }
 ```
 
-Change directory to the `active-directory` folder
+Change directory to the `aws-org` folder
 
 Run `terraform init` to download modules and create initial local state file.
 
@@ -51,7 +50,7 @@ Run `terraform apply` to deploy infrastructure.
 Update the `remote-data.tf` file to add the security state key
 
 ``` hcl
-data "terraform_remote_state" "network-mgmt" {
+data "terraform_remote_state" "aws-org" {
   backend   = "s3"
   workspace = "default"
 
@@ -68,8 +67,8 @@ data "terraform_remote_state" "network-mgmt" {
 
 This module can be called as outlined below.
 
-- Change directories to the `reponame` directory.
-- From the `terraform/aws/reponame` directory run `terraform init`.
+- Change directories to the `aws-org` directory.
+- From the `terraform/aws/aws-org` directory run `terraform init`.
 - Run `terraform plan` to review the resources being created.
 - If everything looks correct in the plan output, run `terraform apply`.
 
@@ -78,19 +77,35 @@ This module can be called as outlined below.
 Include example for how to call the module below with generic variables
 
 ```hcl
-provider "azurerm" {
-  features {}
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "=4.58"
+    }
+  }
 }
+
 
 module "aws_org" {
   source                    = "github.com/Coalfire-CF/ACE-Azure-StorageAccount?ref=vX.X.X"
   service_access_principals = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "guardduty.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com"
   ]
   feature_set = "ALL"
-  aws_new_member_account_email = "example@email.com"
-  aws_new_member_account_name = "aws_account_12345"
+  aws_new_member_account_email = ["example@email.com"]
+  aws_new_member_account_name = ["aws_account_12345"]
+  delegated_admin_account_id = "12345678910"
+  delegated_service_principal = "principal"
+  aws_region = var.aws_region
+  partition = var.partition
+  resource_prefix = var.resource_prefix
+  s3_kms_key_arn = data.terraform_remote_state.setup.outputs.s3_key_arn
+  aws_sec_hub_standards_arn = ["arn:${var.partition}:securityhub:${var.region}::standards/cis-aws-foundations-benchmark/v/1.4.0", "arn:${var.partition}:securityhub:${var.region}::standards/aws-foundational-security-best-practices/v/1.0.0"]
   }
 ```
 

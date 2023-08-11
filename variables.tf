@@ -1,6 +1,13 @@
 variable "service_access_principals" {
   description = "List of AWS Service Access Prinicpals that you want to enable for organization integration"
   type = list(string)
+  default = [
+    "cloudtrail.amazonaws.com",
+    "config.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "guardduty.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com"
+  ]
 }
 
 variable "feature_set" {
@@ -8,7 +15,7 @@ variable "feature_set" {
   default = "ALL"
 }
 
-variable "delegated_account_id" {
+variable "delegated_admin_account_id" {
   description = "The account ID number of the member account in the organization to register as a delegated administrator."
   type = list(string)
   default = null
@@ -27,4 +34,44 @@ variable "aws_new_member_account_name" {
 variable "aws_new_member_account_email" {
   description = "The Email address of the owner to assign to the new member account. This email address must not already be associated with another AWS account."
   default = null
+}
+
+variable "aws_region" {
+  type = string
+}
+
+variable "partition" {
+  type = string
+}
+
+variable "resource_prefix" {
+  type = string
+}
+
+variable "finding_publishing_frequency" {
+  type = string
+  default = "ONE_HOUR"
+}
+
+variable "aws_sec_hub_standards_arn" {
+  type = list[string]
+}
+
+variable "aws_guardduty_datasources_enable_S3" {
+  description = "Configuration for the collected datasources."
+  default = true
+}
+
+variable "aws_guardduty_datasources_enable_k8_audit_logs" {
+  description = "Configuration for the collected datasources."
+  default = true
+}
+
+variable "aws_guardduty_datasources_enable_malware_protection_ebs" {
+  description = "Configuration for the collected datasources."
+  default = true
+}
+
+variable "s3_kms_key_arn" {
+  type = string
 }
