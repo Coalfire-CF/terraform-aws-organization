@@ -28,19 +28,14 @@ If applicable, add here. For example, updating variables, updating `tstate.tf`, 
 
 ``` hcl
 terraform {
-  required_version = ">= 1.1.7"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.45.0"
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "prod-mp-core-rg"
-    storage_account_name = "prodmpsatfstate"
-    container_name       = "tfstatecontainer"
-    environment          = "usgovernment"
-    key                  = "ad.tfstate"
+  required_version = "~>1.5.0"
+  backend "s3" {
+    profile        = "mgmt-prod"
+    bucket         = "prod-us-gov-west-1-tf-state"
+    region         = "us-gov-west-1"
+    key            = "prod-us-gov-west-1-aws-org.tfstate"
+    dynamodb_table = "prod-us-gov-west-1-state-lock"
+    encrypt        = true
   }
 }
 ```
@@ -56,15 +51,15 @@ Run `terraform apply` to deploy infrastructure.
 Update the `remote-data.tf` file to add the security state key
 
 ``` hcl
+data "terraform_remote_state" "network-mgmt" {
+  backend   = "s3"
+  workspace = "default"
 
-data "terraform_remote_state" "usgv-ad" {
-  backend = "azurerm"
   config = {
-    storage_account_name = "${local.storage_name_prefix}satfstate"
-    resource_group_name  = "${local.resource_prefix}-core-rg"
-    container_name       = "${var.location_abbreviation}${var.app_abbreviation}tfstatecontainer"
-    environment          = var.az_environment
-    key                  = "${var.location_abbreviation}-ad.tfstate"
+    bucket  = "${var.resource_prefix}-${var.aws_region}-fr-tf-state"
+    region  = var.aws_region
+    key     = "prod-us-gov-west-1-aws-org.tfstate"
+    profile = "mgmt-prod"
   }
 }
 ```
@@ -74,7 +69,7 @@ data "terraform_remote_state" "usgv-ad" {
 This module can be called as outlined below.
 
 - Change directories to the `reponame` directory.
-- From the `terraform/azure/reponame` directory run `terraform init`.
+- From the `terraform/aws/reponame` directory run `terraform init`.
 - Run `terraform plan` to review the resources being created.
 - If everything looks correct in the plan output, run `terraform apply`.
 
@@ -87,40 +82,16 @@ provider "azurerm" {
   features {}
 }
 
-module "core_sa" {
+module "aws_org" {
   source                    = "github.com/Coalfire-CF/ACE-Azure-StorageAccount?ref=vX.X.X"
-  name                       = "${replace(var.resource_prefix, "-", "")}tfstatesa"
-  resource_group_name        = azurerm_resource_group.management.name
-  location                   = var.location
-  account_kind               = "StorageV2"
-  ip_rules                   = var.ip_for_remote_access
-  diag_log_analytics_id      = azurerm_log_analytics_workspace.core-la.id
-  virtual_network_subnet_ids = var.fw_virtual_network_subnet_ids
-  tags                       = var.tags
-
-  #OPTIONAL
-  public_network_access_enabled = true
-  enable_customer_managed_key   = true
-  cmk_key_vault_id              = module.core_kv.id
-  cmk_key_vault_key_name        = azurerm_key_vault_key.tfstate-cmk.name
-  storage_containers = [
-    "tfstate"
+  service_access_principals = [
+    "cloudtrail.amazonaws.com",
+    "config.amazonaws.com",
   ]
-  storage_shares = [
-    {
-      name = "test"
-      quota = 500
-    }
-  ]
-  lifecycle_policies = [
-    {
-      prefix_match = ["tfstate"]
-      version = {
-        delete_after_days_since_creation = 90
-      }
-    }
-  ]
-}
+  feature_set = "ALL"
+  aws_new_member_account_email = "example@email.com"
+  aws_new_member_account_name = "aws_account_12345"
+  }
 ```
 
 <!-- BEGIN_TF_DOCS -->
