@@ -88,7 +88,7 @@ terraform {
 
 
 module "aws_org" {
-  source                    = "github.com/Coalfire-CF/ACE-Azure-StorageAccount?ref=vX.X.X"
+  source                    = "github.com/Coalfire-CF/ACE-AWS-Organiation?ref=vX.X.X"
   service_access_principals = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
