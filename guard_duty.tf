@@ -4,7 +4,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_guardduty_organization_admin_account" "example" {
   depends_on = [aws_organizations_organization.org]
 
-  admin_account_id = var.delegated_account_id
+  admin_account_id = var.delegated_admin_account_id
 }
 
 resource "aws_guardduty_detector" "guardduty" {
@@ -30,9 +30,12 @@ resource "aws_guardduty_detector" "guardduty" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "guardduty" {
+  name              = "/aws/guardduty/logs"
+}
+
 resource "aws_guardduty_organization_configuration" "guardduty" {
   auto_enable_organization_members = "ALL"
-
   detector_id = aws_guardduty_detector.guardduty.id
 }
 

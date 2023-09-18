@@ -36,6 +36,11 @@ variable "aws_new_member_account_email" {
   default = null
 }
 
+variable "ou_creation_info" {
+  description = "list of names of OU to create and their cooresponding delegated admins"
+  default = null
+}
+
 variable "aws_region" {
   type = string
 }

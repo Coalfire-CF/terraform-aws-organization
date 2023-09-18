@@ -18,6 +18,12 @@ resource "aws_organizations_account" "account" {
   email = each.value
 }
 
+resource "aws_organizations_organizational_unit" "ou" {
+  for_each = var.ou_creation_info
+  name      = ou_creation_info.value["ou_name"]
+  parent_id = ou_creation_info.value["ou_parent_id"]
+}
+
 resource "aws_organizations_policy" "scp" {
   provider = aws.root
   content = data.aws_iam_policy_document.scp.json
@@ -30,61 +36,45 @@ resource "aws_organizations_policy_attachment" "scp" {
   target_id = aws_organizations_organization.org.id
 }
 
-data "aws_iam_policy_document" "scp" {
-  ## Enforce usage of IPAM for creating a VPC
-  statement {
-    effect = "Deny"
-    actions = [
-      "ec2:CreateVpc",
-      "ec2:AssociateVpcCidrBlock"]
-    resources = [
-      "arn:${var.partition}:ec2:*:*:vpc/*"]
-    condition {
-      test = "Null"
-      values = [
-        "true"]
-      variable = "ec2:Ipv4IpamPoolId"
+resource "aws_organizations_resource_policy" "org_resource_policy" {
+  content = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:${var.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
+      },
+      "Action": [
+        "organizations:CreatePolicy",
+        "organizations:UpdatePolicy",
+        "organizations:DeletePolicy",
+        "organizations:AttachPolicy",
+        "organizations:DetachPolicy",
+        "organizations:EnablePolicyType",
+        "organizations:DisablePolicyType",
+        "organizations:DescribeOrganization",
+        "organizations:DescribeOrganizationalUnit",
+        "organizations:DescribeAccount",
+        "organizations:DescribePolicy",
+        "organizations:DescribeEffectivePolicy",
+        "organizations:ListRoots",
+        "organizations:ListOrganizationalUnitsForParent",
+        "organizations:ListParents",
+        "organizations:ListChildren",
+        "organizations:ListAccounts",
+        "organizations:ListAccountsForParent",
+        "organizations:ListPolicies",
+        "organizations:ListPoliciesForTarget",
+        "organizations:ListTargetsForPolicy",
+        "organizations:ListTagsForResource"
+      ],
+      "Resource": [
+        "arn:${var.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[*].id}/*"]
     }
-  }
-
-  ## Prevent member accounts from leaving Org
-  statement {
-    effect = "Deny"
-    actions = ["organizations:LeaveOrganization"]
-    resources = ["*"]
-  }
-
-  ## Enforce enabling of flowlogs for VPC
-  statement {
-    effect = "Deny"
-    actions = ["ec2:DeleteFlowLogs"]
-    resources = ["*"]
-  }
-
-  ## Enforce EC2 tagging for Ansible inventory
-  statement {
-    effect = "Deny"
-    actions = ["ec2:RunInstances"]
-    resources = [
-      "arn:${var.partition}:ec2:*:*:instance/*",
-      "arn:${var.partition}:ec2:*:*:volume/*"
-    ]
-    condition {
-      test = "Null"
-      values = ["true"]
-      variable = "aws:RequestTag/OSType"
-    }
-  }
-
-  ## Deny changing of security tooling IAM role
-  statement {
-    effect = "Deny"
-    actions = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
-    resources = ["arn:${var.partition}:iam::*:role/ops-stack-security-tooling"]
-    condition {
-      test = "StringNotLike"
-      values = ["arn:${var.partition}:iam::*:role/tfadmin"]
-      variable = "aws:PrincipalARN"
-    }
-  }
+  ]
+}
+EOF
 }
