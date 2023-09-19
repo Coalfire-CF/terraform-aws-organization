@@ -133,7 +133,7 @@ No modules.
 | [aws_cloudwatch_log_group.guardduty](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_config_configuration_aggregator.organization](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/config_configuration_aggregator) | resource |
 | [aws_guardduty_detector.guardduty](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_detector) | resource |
-| [aws_guardduty_organization_admin_account.example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_admin_account) | resource |
+| [aws_guardduty_organization_admin_account.gh_admin_account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_admin_account) | resource |
 | [aws_guardduty_organization_configuration.guardduty](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_organization_configuration) | resource |
 | [aws_guardduty_publishing_destination.gd_pub_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_publishing_destination) | resource |
 | [aws_iam_role.aws_config_org_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -170,6 +170,10 @@ No modules.
 | <a name="input_aws_new_member_account_name"></a> [aws\_new\_member\_account\_name](#input\_aws\_new\_member\_account\_name) | The Friendly name for the member account. | `any` | `null` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
 | <a name="input_aws_sec_hub_standards_arn"></a> [aws\_sec\_hub\_standards\_arn](#input\_aws\_sec\_hub\_standards\_arn) | n/a | `list[string]` | n/a | yes |
+| <a name="input_create_org_cloudtrail"></a> [create\_org\_cloudtrail](#input\_create\_org\_cloudtrail) | True/False statement whether to enable AWS Cloudtrail in the Organization | `any` | n/a | yes |
+| <a name="input_create_org_config"></a> [create\_org\_config](#input\_create\_org\_config) | True/False statement whether to enable AWS Config in the Organization | `any` | n/a | yes |
+| <a name="input_create_org_guardduty"></a> [create\_org\_guardduty](#input\_create\_org\_guardduty) | True/False statement whether to enable AWS GuardDuty in the Organization | `any` | n/a | yes |
+| <a name="input_create_org_securityhub"></a> [create\_org\_securityhub](#input\_create\_org\_securityhub) | True/False statement whether to enable AWS Security Hub in the Organization | `any` | n/a | yes |
 | <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The account ID number of the member account in the organization to register as a delegated administrator. | `list(string)` | `null` | no |
 | <a name="input_delegated_service_principal"></a> [delegated\_service\_principal](#input\_delegated\_service\_principal) | The service principal of the AWS service for which you want to make the member account a delegated administrator. | `any` | `null` | no |
 | <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
