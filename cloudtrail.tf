@@ -1,4 +1,5 @@
 resource "aws_cloudtrail" "org-trail" {
+  count = var.create_org_cloudtrail ? 1 : 0
 
   name = "${var.resource_prefix}-org-cloudtrail"
   s3_bucket_name = "${var.resource_prefix}-${var.aws_region}-org-cloudtrail"

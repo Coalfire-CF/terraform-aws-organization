@@ -80,3 +80,19 @@ variable "aws_guardduty_datasources_enable_malware_protection_ebs" {
 variable "s3_kms_key_arn" {
   type = string
 }
+
+variable "create_org_config" {
+  description = "True/False statement whether to enable AWS Config in the Organization"
+}
+
+variable "create_org_guardduty" {
+  description = "True/False statement whether to enable AWS GuardDuty in the Organization"
+}
+
+variable "create_org_cloudtrail" {
+  description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
+}
+
+variable "create_org_securityhub" {
+  description = "True/False statement whether to enable AWS Security Hub in the Organization"
+}

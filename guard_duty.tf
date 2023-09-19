@@ -1,14 +1,19 @@
 data "aws_caller_identity" "current" {}
 
 
-resource "aws_guardduty_organization_admin_account" "example" {
+resource "aws_guardduty_organization_admin_account" "gh_admin_account" {
+  count = var.create_org_guardduty ? 1 : 0
+
   depends_on = [aws_organizations_organization.org]
+
 
   admin_account_id = var.delegated_admin_account_id
 }
 
 resource "aws_guardduty_detector" "guardduty" {
-  enable = true
+  count = var.create_org_guardduty ? 1 : 0
+
+  enable                       = true
   finding_publishing_frequency = var.finding_publishing_frequency
 
   datasources {
@@ -31,15 +36,21 @@ resource "aws_guardduty_detector" "guardduty" {
 }
 
 resource "aws_cloudwatch_log_group" "guardduty" {
-  name              = "/aws/guardduty/logs"
+  count = var.create_org_guardduty ? 1 : 0
+
+  name = "/aws/guardduty/logs"
 }
 
 resource "aws_guardduty_organization_configuration" "guardduty" {
+  count = var.create_org_guardduty ? 1 : 0
+
   auto_enable_organization_members = "ALL"
-  detector_id = aws_guardduty_detector.guardduty.id
+  detector_id                      = aws_guardduty_detector.guardduty.id
 }
 
 data "aws_iam_policy_document" "bucket_pol" {
+  count = var.create_org_guardduty ? 1 : 0
+
   statement {
     sid = "Allow PutObject"
     actions = [
@@ -74,6 +85,7 @@ data "aws_iam_policy_document" "bucket_pol" {
 }
 
 data "aws_iam_policy_document" "kms_pol" {
+  count = var.create_org_guardduty ? 1 : 0
 
   statement {
     sid = "Allow GuardDuty to encrypt findings"
@@ -110,27 +122,37 @@ data "aws_iam_policy_document" "kms_pol" {
 }
 
 resource "aws_s3_bucket" "gd_bucket" {
+  count = var.create_org_guardduty ? 1 : 0
+
   bucket        = "${var.resource_prefix}-${var.aws_region}-guardduty-findings"
   force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "gd_bucket_acl" {
+  count = var.create_org_guardduty ? 1 : 0
+
   bucket = aws_s3_bucket.gd_bucket.id
   acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "gd_bucket_policy" {
+  count = var.create_org_guardduty ? 1 : 0
+
   bucket = aws_s3_bucket.gd_bucket.id
   policy = data.aws_iam_policy_document.bucket_pol.json
 }
 
 resource "aws_kms_key" "gd_key" {
+  count = var.create_org_guardduty ? 1 : 0
+
   description             = "kms key for guardduty"
   deletion_window_in_days = 7
   policy                  = data.aws_iam_policy_document.kms_pol.json
 }
 
 resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
+  count = var.create_org_guardduty ? 1 : 0
+
   detector_id     = aws_guardduty_detector.guardduty.id
   destination_arn = aws_s3_bucket.gd_bucket.arn
   kms_key_arn     = aws_kms_key.gd_key.arn
