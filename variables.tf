@@ -1,5 +1,5 @@
 variable "service_access_principals" {
-  description = "List of AWS Service Access Prinicpals that you want to enable for organization integration"
+  description = "List of AWS Service Access Principals that you want to enable for organization integration"
   type = list(string)
   default = [
     "cloudtrail.amazonaws.com",
@@ -37,7 +37,7 @@ variable "aws_new_member_account_email" {
 }
 
 variable "ou_creation_info" {
-  description = "list of names of OU to create and their cooresponding delegated admins"
+  description = "list of names of OU to create and their corresponding delegated admins"
   default = null
 }
 
@@ -83,16 +83,20 @@ variable "s3_kms_key_arn" {
 
 variable "create_org_config" {
   description = "True/False statement whether to enable AWS Config in the Organization"
+  default = true
 }
 
 variable "create_org_guardduty" {
   description = "True/False statement whether to enable AWS GuardDuty in the Organization"
+  default = true
 }
 
 variable "create_org_cloudtrail" {
   description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
+  default = true
 }
 
 variable "create_org_securityhub" {
   description = "True/False statement whether to enable AWS Security Hub in the Organization"
+  default = true
 }

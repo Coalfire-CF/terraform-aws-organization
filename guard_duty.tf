@@ -45,7 +45,7 @@ resource "aws_guardduty_organization_configuration" "guardduty" {
   count = var.create_org_guardduty ? 1 : 0
 
   auto_enable_organization_members = "ALL"
-  detector_id                      = aws_guardduty_detector.guardduty.id
+  detector_id                      = aws_guardduty_detector.guardduty[0].id
 }
 
 data "aws_iam_policy_document" "bucket_pol" {
@@ -131,14 +131,14 @@ resource "aws_s3_bucket" "gd_bucket" {
 resource "aws_s3_bucket_acl" "gd_bucket_acl" {
   count = var.create_org_guardduty ? 1 : 0
 
-  bucket = aws_s3_bucket.gd_bucket.id
+  bucket = aws_s3_bucket.gd_bucket[0].id
   acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   count = var.create_org_guardduty ? 1 : 0
 
-  bucket = aws_s3_bucket.gd_bucket.id
+  bucket = aws_s3_bucket.gd_bucket[0].id
   policy = data.aws_iam_policy_document.bucket_pol.json
 }
 
@@ -153,11 +153,11 @@ resource "aws_kms_key" "gd_key" {
 resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
   count = var.create_org_guardduty ? 1 : 0
 
-  detector_id     = aws_guardduty_detector.guardduty.id
-  destination_arn = aws_s3_bucket.gd_bucket.arn
+  detector_id     = aws_guardduty_detector.guardduty[0].id
+  destination_arn = aws_s3_bucket.gd_bucket[0].arn
   kms_key_arn     = aws_kms_key.gd_key.arn
 
   depends_on = [
-    aws_s3_bucket_policy.gd_bucket_policy,
+    aws_s3_bucket_policy.gd_bucket_policy[0],
   ]
 }
