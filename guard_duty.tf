@@ -128,13 +128,6 @@ resource "aws_s3_bucket" "gd_bucket" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_acl" "gd_bucket_acl" {
-  count = var.create_org_guardduty ? 1 : 0
-
-  bucket = aws_s3_bucket.gd_bucket[0].id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   count = var.create_org_guardduty ? 1 : 0
 
