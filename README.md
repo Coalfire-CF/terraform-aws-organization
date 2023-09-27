@@ -3,7 +3,12 @@
 
 </div>
 
-## ACE AWS Organizations Module
+## ACE AWS Organizations Terraform Module
+
+## Description
+This module sets up an AWS Organization with org-level services, including Guard Duty, Security Hub, AWS Config, and Cloudtrail.
+
+FedRAMP Compliance: Moderate, High
 
 ## Dependencies
 
@@ -18,50 +23,8 @@ A high-level list of resources created as a part of this module.
   - Security Hub
   - AWS Config
   - Cloudtrail
-
-## Code Updates
-
-If applicable, add here. For example, updating variables, updating `tstate.tf`, or remote data sources.
-
-`tstate.tf` Update to the appropriate version and storage accounts, see sample
-
-``` hcl
-terraform {
-  required_version = "~>1.5.0"
-  backend "s3" {
-    profile        = "mgmt-prod"
-    bucket         = "prod-us-gov-west-1-tf-state"
-    region         = "us-gov-west-1"
-    key            = "prod-us-gov-west-1-aws-org.tfstate"
-    dynamodb_table = "prod-us-gov-west-1-state-lock"
-    encrypt        = true
-  }
-}
-```
-
-Change directory to the `aws-org` folder
-
-Run `terraform init` to download modules and create initial local state file.
-
-Run `terraform plan` to ensure no errors and validate plan is deploying expected resources.
-
-Run `terraform apply` to deploy infrastructure.
-
-Update the `remote-data.tf` file to add the security state key
-
-``` hcl
-data "terraform_remote_state" "aws-org" {
-  backend   = "s3"
-  workspace = "default"
-
-  config = {
-    bucket  = "${var.resource_prefix}-${var.aws_region}-fr-tf-state"
-    region  = var.aws_region
-    key     = "prod-us-gov-west-1-aws-org.tfstate"
-    profile = "mgmt-prod"
-  }
-}
-```
+- AWS Organization policy
+- IAM role and policy
 
 ## Deployment Steps
 
@@ -88,7 +51,7 @@ terraform {
 
 
 module "aws_org" {
-  source                    = "github.com/Coalfire-CF/ACE-AWS-Organiation?ref=vX.X.X"
+  source                    = "github.com/Coalfire-CF/terraform-aws-organization"
   service_access_principals = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
