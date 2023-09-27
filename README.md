@@ -119,11 +119,12 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
-| <a name="provider_aws.root"></a> [aws.root](#provider\_aws.root) | n/a |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_guardduty_kms_key"></a> [guardduty\_kms\_key](#module\_guardduty\_kms\_key) | github.com/Coalfire-CF/terraform-aws-kms | n/a |
 
 ## Resources
 
@@ -138,7 +139,6 @@ No modules.
 | [aws_guardduty_publishing_destination.gd_pub_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/guardduty_publishing_destination) | resource |
 | [aws_iam_role.aws_config_org_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.organization](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_kms_key.gd_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_organizations_account.account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_account) | resource |
 | [aws_organizations_delegated_administrator.delegated](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_delegated_administrator) | resource |
 | [aws_organizations_delegated_administrator.delegated_admin](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_delegated_administrator) | resource |
@@ -157,6 +157,7 @@ No modules.
 | [aws_iam_policy_document.bucket_pol](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.kms_pol](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.scp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 
 ## Inputs
 
@@ -168,17 +169,16 @@ No modules.
 | <a name="input_aws_new_member_account_email"></a> [aws\_new\_member\_account\_email](#input\_aws\_new\_member\_account\_email) | The Email address of the owner to assign to the new member account. This email address must not already be associated with another AWS account. | `any` | `null` | no |
 | <a name="input_aws_new_member_account_name"></a> [aws\_new\_member\_account\_name](#input\_aws\_new\_member\_account\_name) | The Friendly name for the member account. | `any` | `null` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
-| <a name="input_aws_sec_hub_standards_arn"></a> [aws\_sec\_hub\_standards\_arn](#input\_aws\_sec\_hub\_standards\_arn) | n/a | `list[string]` | n/a | yes |
+| <a name="input_aws_sec_hub_standards_arn"></a> [aws\_sec\_hub\_standards\_arn](#input\_aws\_sec\_hub\_standards\_arn) | n/a | `list(string)` | n/a | yes |
 | <a name="input_create_org_cloudtrail"></a> [create\_org\_cloudtrail](#input\_create\_org\_cloudtrail) | True/False statement whether to enable AWS Cloudtrail in the Organization | `bool` | `true` | no |
 | <a name="input_create_org_config"></a> [create\_org\_config](#input\_create\_org\_config) | True/False statement whether to enable AWS Config in the Organization | `bool` | `true` | no |
 | <a name="input_create_org_guardduty"></a> [create\_org\_guardduty](#input\_create\_org\_guardduty) | True/False statement whether to enable AWS GuardDuty in the Organization | `bool` | `true` | no |
 | <a name="input_create_org_securityhub"></a> [create\_org\_securityhub](#input\_create\_org\_securityhub) | True/False statement whether to enable AWS Security Hub in the Organization | `bool` | `true` | no |
 | <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The account ID number of the member account in the organization to register as a delegated administrator. | `list(string)` | `null` | no |
-| <a name="input_delegated_service_principal"></a> [delegated\_service\_principal](#input\_delegated\_service\_principal) | The service principal of the AWS service for which you want to make the member account a delegated administrator. | `any` | `null` | no |
+| <a name="input_delegated_service_principal"></a> [delegated\_service\_principal](#input\_delegated\_service\_principal) | The service principal of the AWS service for which you want to make the member account a delegated administrator. | `string` | `"principal"` | no |
 | <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
 | <a name="input_finding_publishing_frequency"></a> [finding\_publishing\_frequency](#input\_finding\_publishing\_frequency) | n/a | `string` | `"ONE_HOUR"` | no |
 | <a name="input_ou_creation_info"></a> [ou\_creation\_info](#input\_ou\_creation\_info) | list of names of OU to create and their corresponding delegated admins | `any` | `null` | no |
-| <a name="input_partition"></a> [partition](#input\_partition) | n/a | `string` | n/a | yes |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
 | <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | n/a | `string` | n/a | yes |
 | <a name="input_service_access_principals"></a> [service\_access\_principals](#input\_service\_access\_principals) | List of AWS Service Access Principals that you want to enable for organization integration | `list(string)` | <pre>[<br>  "cloudtrail.amazonaws.com",<br>  "config.amazonaws.com",<br>  "securityhub.amazonaws.com",<br>  "guardduty.amazonaws.com",<br>  "config-multiaccountsetup.amazonaws.com"<br>]</pre> | no |
