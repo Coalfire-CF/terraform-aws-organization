@@ -75,13 +75,16 @@ module "aws_org" {
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
 
 ## Modules
 
@@ -137,7 +140,7 @@ No requirements.
 | <a name="input_create_org_config"></a> [create\_org\_config](#input\_create\_org\_config) | True/False statement whether to enable AWS Config in the Organization | `bool` | `true` | no |
 | <a name="input_create_org_guardduty"></a> [create\_org\_guardduty](#input\_create\_org\_guardduty) | True/False statement whether to enable AWS GuardDuty in the Organization | `bool` | `true` | no |
 | <a name="input_create_org_securityhub"></a> [create\_org\_securityhub](#input\_create\_org\_securityhub) | True/False statement whether to enable AWS Security Hub in the Organization | `bool` | `true` | no |
-| <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The account ID number of the member account in the organization to register as a delegated administrator. | `list(string)` | `null` | no |
+| <a name="input_delegated_admin_account_id"></a> [delegated\_admin\_account\_id](#input\_delegated\_admin\_account\_id) | The account ID number of the member account in the organization to register as a delegated administrator. | `string` | `null` | no |
 | <a name="input_delegated_service_principal"></a> [delegated\_service\_principal](#input\_delegated\_service\_principal) | The service principal of the AWS service for which you want to make the member account a delegated administrator. | `string` | `"principal"` | no |
 | <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
 | <a name="input_finding_publishing_frequency"></a> [finding\_publishing\_frequency](#input\_finding\_publishing\_frequency) | n/a | `string` | `"ONE_HOUR"` | no |
