@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "kms_pol" {
     ]
 
     resources = [
-      "arn:${var.partition}:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:key/*"
+      "arn:${data.aws_partition.current.partition}:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:key/*"
     ]
 
     principals {
@@ -110,7 +110,7 @@ data "aws_iam_policy_document" "kms_pol" {
     ]
 
     resources = [
-      "arn:${var.partition}:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:key/*"
+      "arn:${data.aws_partition.current.partition}:kms:${var.aws_region}:${data.aws_caller_identity.current.account_id}:key/*"
     ]
 
     principals {
@@ -135,20 +135,22 @@ resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   policy = data.aws_iam_policy_document.bucket_pol.json
 }
 
-resource "aws_kms_key" "gd_key" {
+module "guardduty_kms_key" {
   count = var.create_org_guardduty ? 1 : 0
+  source = "github.com/Coalfire-CF/terraform-aws-kms"
 
-  description             = "kms key for guardduty"
-  deletion_window_in_days = 7
-  policy                  = data.aws_iam_policy_document.kms_pol.json
+  key_policy            = data.aws_iam_policy_document.kms_pol.json
+  kms_key_resource_type = "backup"
+  resource_prefix       = var.resource_prefix
 }
+
 
 resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
   count = var.create_org_guardduty ? 1 : 0
 
   detector_id     = aws_guardduty_detector.guardduty[0].id
   destination_arn = aws_s3_bucket.gd_bucket[0].arn
-  kms_key_arn     = aws_kms_key.gd_key.arn
+  kms_key_arn     = module.guardduty_kms_key.arn
 
   depends_on = [
     aws_s3_bucket_policy.gd_bucket_policy[0],

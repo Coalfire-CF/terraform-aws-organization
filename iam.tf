@@ -18,7 +18,7 @@ resource "aws_iam_role" "aws_config_org_role" {
 
 resource "aws_iam_role_policy_attachment" "organization" {
   role       = aws_iam_role.aws_config_org_role.name
-  policy_arn = "arn:${var.partition}:iam::aws:policy/service-role/AWSConfigRoleForOrganizations"
+  policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AWSConfigRoleForOrganizations"
 }
 
 ### AWS ORG IAM
@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "scp" {
       "ec2:CreateVpc",
       "ec2:AssociateVpcCidrBlock"]
     resources = [
-      "arn:${var.partition}:ec2:*:*:vpc/*"]
+      "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"]
     condition {
       test = "Null"
       values = [
@@ -59,8 +59,8 @@ data "aws_iam_policy_document" "scp" {
     effect = "Deny"
     actions = ["ec2:RunInstances"]
     resources = [
-      "arn:${var.partition}:ec2:*:*:instance/*",
-      "arn:${var.partition}:ec2:*:*:volume/*"
+      "arn:${data.aws_partition.current.partition}:ec2:*:*:instance/*",
+      "arn:${data.aws_partition.current.partition}:ec2:*:*:volume/*"
     ]
     condition {
       test = "Null"
@@ -73,10 +73,10 @@ data "aws_iam_policy_document" "scp" {
   statement {
     effect = "Deny"
     actions = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
-    resources = ["arn:${var.partition}:iam::*:role/ops-stack-security-tooling"]
+    resources = ["arn:${data.aws_partition.current.partition}:iam::*:role/ops-stack-security-tooling"]
     condition {
       test = "StringNotLike"
-      values = ["arn:${var.partition}:iam::*:role/tfadmin"]
+      values = ["arn:${data.aws_partition.current.partition}:iam::*:role/tfadmin"]
       variable = "aws:PrincipalARN"
     }
   }

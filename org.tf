@@ -20,18 +20,16 @@ resource "aws_organizations_account" "account" {
 
 resource "aws_organizations_organizational_unit" "ou" {
   for_each = var.ou_creation_info
-  name      = ou_creation_info.value["ou_name"]
-  parent_id = ou_creation_info.value["ou_parent_id"]
+  name      = each.value["ou_name"]
+  parent_id = each.value["ou_parent_id"]
 }
 
 resource "aws_organizations_policy" "scp" {
-  provider = aws.root
   content = data.aws_iam_policy_document.scp.json
   name = "FedModGovSCP"
 }
 
 resource "aws_organizations_policy_attachment" "scp" {
-  provider = aws.root
   policy_id = aws_organizations_policy.scp.id
   target_id = aws_organizations_organization.org.id
 }
@@ -45,7 +43,7 @@ resource "aws_organizations_resource_policy" "org_resource_policy" {
       "Sid": "Statement",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:${var.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
+        "AWS": "arn:${data.aws_partition.current.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
       },
       "Action": [
         "organizations:CreatePolicy",
@@ -72,7 +70,7 @@ resource "aws_organizations_resource_policy" "org_resource_policy" {
         "organizations:ListTagsForResource"
       ],
       "Resource": [
-        "arn:${var.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[*].id}/*"]
+        "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[*].id}/*"]
     }
   ]
 }

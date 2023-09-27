@@ -23,7 +23,7 @@ variable "delegated_admin_account_id" {
 
 variable "delegated_service_principal" {
   description = "The service principal of the AWS service for which you want to make the member account a delegated administrator."
-  default = null
+  default = "principal"
 }
 
 variable "aws_new_member_account_name" {
@@ -45,9 +45,6 @@ variable "aws_region" {
   type = string
 }
 
-variable "partition" {
-  type = string
-}
 
 variable "resource_prefix" {
   type = string
@@ -59,7 +56,7 @@ variable "finding_publishing_frequency" {
 }
 
 variable "aws_sec_hub_standards_arn" {
-  type = list[string]
+  type = list(string)
 }
 
 variable "aws_guardduty_datasources_enable_S3" {
