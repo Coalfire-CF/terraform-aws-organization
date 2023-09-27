@@ -7,15 +7,15 @@ resource "aws_organizations_organization" "org" {
 }
 
 resource "aws_organizations_delegated_administrator" "delegated_admin" {
-  for_each = var.delegated_admin_account_id
-  account_id        = each.value
-  service_principal = var.delegated_service_principal[each.index]
+  count = length(var.delegated_admin_account_id)
+  account_id        = var.delegated_admin_account_id[count.index]
+  service_principal = var.delegated_service_principal[count.index]
 }
 
 resource "aws_organizations_account" "account" {
-  for_each  = var.aws_new_member_account_email
-  name  = var.aws_new_member_account_name[each.index]
-  email = each.value
+  count  = length(var.aws_new_member_account_email)
+  name  = var.aws_new_member_account_name[count.index]
+  email = var.aws_new_member_account_email[count.index]
 }
 
 resource "aws_organizations_organizational_unit" "ou" {
