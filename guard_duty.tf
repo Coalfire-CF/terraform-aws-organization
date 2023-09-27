@@ -40,7 +40,6 @@ resource "aws_cloudwatch_log_group" "guardduty" {
 
 resource "aws_guardduty_organization_configuration" "guardduty" {
   count = var.create_org_guardduty ? 1 : 0
-  auto_enable = true
   auto_enable_organization_members = "ALL"
   detector_id                      = aws_guardduty_detector.guardduty[0].id
 
@@ -166,7 +165,7 @@ resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
 
   detector_id     = aws_guardduty_detector.guardduty[0].id
   destination_arn = aws_s3_bucket.gd_bucket[0].arn
-  kms_key_arn     = module.guardduty_kms_key.arn
+  kms_key_arn     = module.guardduty_kms_key[0].kms_key_arn
 
   depends_on = [
     aws_s3_bucket_policy.gd_bucket_policy[0],

@@ -12,8 +12,8 @@ resource "aws_securityhub_organization_configuration" "sechub_org_config" {
 }
 
 resource "aws_securityhub_standards_subscription" "cis" {
-  for_each = var.aws_sec_hub_standards_arn
+  count = length(var.aws_sec_hub_standards_arn)
   depends_on    = [aws_securityhub_organization_admin_account.sechub_org_admin[0]]
-  standards_arn = each.value
+  standards_arn = var.aws_sec_hub_standards_arn[count.index]
 }
 
