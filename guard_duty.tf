@@ -40,9 +40,28 @@ resource "aws_cloudwatch_log_group" "guardduty" {
 
 resource "aws_guardduty_organization_configuration" "guardduty" {
   count = var.create_org_guardduty ? 1 : 0
-
+  auto_enable = true
   auto_enable_organization_members = "ALL"
   detector_id                      = aws_guardduty_detector.guardduty[0].id
+
+  datasources {
+    s3_logs {
+      auto_enable = true
+    }
+    kubernetes {
+      audit_logs {
+        enable = true
+      }
+    }
+    malware_protection {
+      scan_ec2_instance_with_findings {
+        ebs_volumes {
+          auto_enable = true
+        }
+      }
+    }
+  }
+
 }
 
 data "aws_iam_policy_document" "bucket_pol" {
@@ -129,14 +148,14 @@ resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   count = var.create_org_guardduty ? 1 : 0
 
   bucket = aws_s3_bucket.gd_bucket[0].id
-  policy = data.aws_iam_policy_document.bucket_pol.json
+  policy = data.aws_iam_policy_document.bucket_pol[0].json
 }
 
 module "guardduty_kms_key" {
   count = var.create_org_guardduty ? 1 : 0
   source = "github.com/Coalfire-CF/terraform-aws-kms"
 
-  key_policy            = data.aws_iam_policy_document.kms_pol.json
+  key_policy            = data.aws_iam_policy_document.kms_pol[0].json
   kms_key_resource_type = "backup"
   resource_prefix       = var.resource_prefix
 }
