@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-
 resource "aws_guardduty_organization_admin_account" "gh_admin_account" {
   count = var.create_org_guardduty ? 1 : 0
 
