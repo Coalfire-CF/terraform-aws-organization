@@ -8,28 +8,8 @@ resource "aws_guardduty_organization_admin_account" "gh_admin_account" {
 }
 
 resource "aws_guardduty_detector" "guardduty" {
-  count = var.create_org_guardduty ? 1 : 0
-
   enable                       = true
   finding_publishing_frequency = var.finding_publishing_frequency
-
-  datasources {
-    s3_logs {
-      enable = var.aws_guardduty_datasources_enable_S3
-    }
-    kubernetes {
-      audit_logs {
-        enable = var.aws_guardduty_datasources_enable_k8_audit_logs
-      }
-    }
-    malware_protection {
-      scan_ec2_instance_with_findings {
-        ebs_volumes {
-          enable = var.aws_guardduty_datasources_enable_malware_protection_ebs
-        }
-      }
-    }
-  }
 }
 
 resource "aws_cloudwatch_log_group" "guardduty" {
@@ -39,25 +19,13 @@ resource "aws_cloudwatch_log_group" "guardduty" {
 }
 
 resource "aws_guardduty_organization_configuration" "guardduty" {
-  count = var.create_org_guardduty ? 1 : 0
+  #count = var.create_org_guardduty ? 1 : 0
   auto_enable_organization_members = "ALL"
-  detector_id                      = aws_guardduty_detector.guardduty[0].id
+  detector_id                      = aws_guardduty_detector.guardduty.id
 
   datasources {
     s3_logs {
       auto_enable = true
-    }
-    kubernetes {
-      audit_logs {
-        enable = true
-      }
-    }
-    malware_protection {
-      scan_ec2_instance_with_findings {
-        ebs_volumes {
-          auto_enable = true
-        }
-      }
     }
   }
 
@@ -130,7 +98,7 @@ data "aws_iam_policy_document" "kms_pol" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = ["arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
   }
 
@@ -155,7 +123,7 @@ module "guardduty_kms_key" {
   source = "github.com/Coalfire-CF/terraform-aws-kms"
 
   key_policy            = data.aws_iam_policy_document.kms_pol[0].json
-  kms_key_resource_type = "backup"
+  kms_key_resource_type = "guardduty"
   resource_prefix       = var.resource_prefix
 }
 
@@ -163,7 +131,7 @@ module "guardduty_kms_key" {
 resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
   count = var.create_org_guardduty ? 1 : 0
 
-  detector_id     = aws_guardduty_detector.guardduty[0].id
+  detector_id     = aws_guardduty_organization_configuration.guardduty.detector_id
   destination_arn = aws_s3_bucket.gd_bucket[0].arn
   kms_key_arn     = module.guardduty_kms_key[0].kms_key_arn
 

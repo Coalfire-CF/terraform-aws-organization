@@ -10,6 +10,11 @@ variable "service_access_principals" {
   ]
 }
 
+variable "enabled_policy_types" {
+  description = "List of Organizations policy types to enable in the Organization Root. Organization must have feature_set set to ALL."
+  default = null
+}
+
 variable "feature_set" {
   description = "Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED_BILLING."
   default = "ALL"
@@ -96,4 +101,8 @@ variable "create_org_cloudtrail" {
 variable "create_org_securityhub" {
   description = "True/False statement whether to enable AWS Security Hub in the Organization"
   default = true
+}
+
+variable "org_member_account_numbers" {
+  default = null
 }

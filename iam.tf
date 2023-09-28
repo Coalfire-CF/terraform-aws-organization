@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "assume_role" {
     actions = ["sts:AssumeRole"]
   }
 }
+
 resource "aws_iam_role" "aws_config_org_role" {
   name               = "org-config-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -24,21 +25,21 @@ resource "aws_iam_role_policy_attachment" "organization" {
 ### AWS ORG IAM
 
 data "aws_iam_policy_document" "scp" {
-  ## Enforce usage of IPAM for creating a VPC
-  statement {
-    effect = "Deny"
-    actions = [
-      "ec2:CreateVpc",
-      "ec2:AssociateVpcCidrBlock"]
-    resources = [
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"]
-    condition {
-      test = "Null"
-      values = [
-        "true"]
-      variable = "ec2:Ipv4IpamPoolId"
-    }
-  }
+#  ## Enforce usage of IPAM for creating a VPC
+#  statement {
+#    effect = "Deny"
+#    actions = [
+#      "ec2:CreateVpc",
+#      "ec2:AssociateVpcCidrBlock"]
+#    resources = [
+#      "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"]
+#    condition {
+#      test = "Null"
+#      values = [
+#        "true"]
+#      variable = "ec2:Ipv4IpamPoolId"
+#    }
+#  }
 
   ## Prevent member accounts from leaving Org
   statement {
@@ -54,7 +55,7 @@ data "aws_iam_policy_document" "scp" {
     resources = ["*"]
   }
 
-  ## Enforce EC2 tagging for Ansible inventory
+  ## Enforce EC2 tagging
   statement {
     effect = "Deny"
     actions = ["ec2:RunInstances"]
@@ -68,16 +69,34 @@ data "aws_iam_policy_document" "scp" {
       variable = "aws:RequestTag/OSType"
     }
   }
-
-  ## Deny changing of security tooling IAM role
   statement {
-    effect = "Deny"
-    actions = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
-    resources = ["arn:${data.aws_partition.current.partition}:iam::*:role/ops-stack-security-tooling"]
-    condition {
-      test = "StringNotLike"
-      values = ["arn:${data.aws_partition.current.partition}:iam::*:role/tfadmin"]
-      variable = "aws:PrincipalARN"
-    }
+    effect = "Allow"
+    actions = [
+        "organizations:RegisterDelegatedAdministrator",
+        "organizations:ListDelegatedAdministrators",
+        "organizations:ListAWSServiceAccessForOrganization",
+        "organizations:EnableAWSServiceAccess",
+        "organizations:DescribeOrganizationalUnit",
+        "organizations:DescribeOrganization",
+        "organizations:DescribeAccount",
+        "guardduty:EnableOrganizationAdminAccount",
+        "config:DescribeDeliveryChannelStatus",
+        "config:DescribeConformancePackStatus",
+        "config:PutOrganizationConfigRule",
+        "config:PutOrganizationConformancePack",
+        "config:GetOrganizationCustomRulePolicy",
+        "organizations:InviteAccountToOrganization",
+        "organizations:UpdateOrganizationalUnit",
+        "guardduty:ListOrganizationAdminAccounts",
+        "guardduty:DescribeOrganizationConfiguration",
+        "guardduty:UpdateOrganizationConfiguration",
+        "securityhub:ListOrganizationAdminAccounts",
+        "securityhub:DescribeOrganizationConfiguration",
+        "securityhub:EnableOrganizationAdminAccount",
+        "securityhub:UpdateOrganizationConfiguration",
+        "cloudtrail:RegisterOrganizationDelegatedAdmin"
+    ]
+    resources = ["*"]
+
   }
 }
