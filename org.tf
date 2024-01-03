@@ -9,14 +9,14 @@ resource "aws_organizations_organization" "org" {
 resource "aws_organizations_delegated_administrator" "delegated_admin" {
   for_each = toset(var.delegated_admin_account_id)
 
-  account_id        = each.value
-  service_principal = var.delegated_service_principal[each.key]
+  account_id        = each.key
+  service_principal = var.delegated_service_principal[each.value]
 }
 
 resource "aws_organizations_account" "account" {
   for_each = toset(var.aws_new_member_account_email)
 
-  name  = var.aws_new_member_account_name[each.key]
+  name  = var.org_account_name
   email = each.value
 }
 
