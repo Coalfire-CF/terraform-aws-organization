@@ -129,14 +129,14 @@ resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   count = var.create_org_guardduty ? 1 : 0
 
   bucket = aws_s3_bucket.gd_bucket[0].id
-  policy = data.aws_iam_policy_document.bucket_pol[*].json
+  policy = data.aws_iam_policy_document.bucket_pol[0].json
 }
 
 module "guardduty_kms_key" {
   count  = var.create_org_guardduty ? 1 : 0
   source = "github.com/Coalfire-CF/terraform-aws-kms"
 
-  key_policy            = data.aws_iam_policy_document.kms_pol[*].json
+  key_policy            = data.aws_iam_policy_document.kms_pol[0].json
   kms_key_resource_type = "backup"
   resource_prefix       = var.resource_prefix
 }
