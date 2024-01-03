@@ -38,8 +38,17 @@ variable "aws_new_member_account_email" {
 
 variable "ou_creation_info" {
   description = "list of names of OU to create and their corresponding delegated admins"
-  type        = map(string)
-  default     = null
+  type        = map(map(string))
+  default = {
+    ou1 = {
+      ou_name      = "app_ou1"
+      ou_parent_id = "parent_id1"
+    },
+    ou2 = {
+      ou_name      = "app_ou2"
+      ou_parent_id = "parent_id2"
+    }
+  }
 }
 
 variable "aws_region" {
