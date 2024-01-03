@@ -1,9 +1,9 @@
 output "accounts" {
-  value = aws_organizations_organization.org.accounts
+  value       = aws_organizations_organization.org.accounts
   description = "List of org accounts including master"
 }
 
-resource "aws_organizations_delegated_administrator" "delegated" {
-  account_id        = var.delegated_account_id
-  service_principal = var.delegated_service_principal
+output "master_account_id" {
+  value       = aws_organizations_organization.org.master_account_id
+  description = "Master account ID"
 }

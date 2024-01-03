@@ -29,54 +29,54 @@ data "aws_iam_policy_document" "scp" {
     effect = "Deny"
     actions = [
       "ec2:CreateVpc",
-      "ec2:AssociateVpcCidrBlock"]
+    "ec2:AssociateVpcCidrBlock"]
     resources = [
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"]
+    "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"]
     condition {
       test = "Null"
       values = [
-        "true"]
+      "true"]
       variable = "ec2:Ipv4IpamPoolId"
     }
   }
 
   ## Prevent member accounts from leaving Org
   statement {
-    effect = "Deny"
-    actions = ["organizations:LeaveOrganization"]
+    effect    = "Deny"
+    actions   = ["organizations:LeaveOrganization"]
     resources = ["*"]
   }
 
   ## Enforce enabling of flowlogs for VPC
   statement {
-    effect = "Deny"
-    actions = ["ec2:DeleteFlowLogs"]
+    effect    = "Deny"
+    actions   = ["ec2:DeleteFlowLogs"]
     resources = ["*"]
   }
 
   ## Enforce EC2 tagging for Ansible inventory
   statement {
-    effect = "Deny"
+    effect  = "Deny"
     actions = ["ec2:RunInstances"]
     resources = [
       "arn:${data.aws_partition.current.partition}:ec2:*:*:instance/*",
       "arn:${data.aws_partition.current.partition}:ec2:*:*:volume/*"
     ]
     condition {
-      test = "Null"
-      values = ["true"]
+      test     = "Null"
+      values   = ["true"]
       variable = "aws:RequestTag/OSType"
     }
   }
 
   ## Deny changing of security tooling IAM role
   statement {
-    effect = "Deny"
-    actions = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
+    effect    = "Deny"
+    actions   = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
     resources = ["arn:${data.aws_partition.current.partition}:iam::*:role/ops-stack-security-tooling"]
     condition {
-      test = "StringNotLike"
-      values = ["arn:${data.aws_partition.current.partition}:iam::*:role/tfadmin"]
+      test     = "StringNotLike"
+      values   = ["arn:${data.aws_partition.current.partition}:iam::*:role/tfadmin"]
       variable = "aws:PrincipalARN"
     }
   }

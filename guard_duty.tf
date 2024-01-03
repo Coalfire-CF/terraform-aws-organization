@@ -1,13 +1,10 @@
-data "aws_caller_identity" "current" {}
-
-
 resource "aws_guardduty_organization_admin_account" "gh_admin_account" {
   count = var.create_org_guardduty ? 1 : 0
 
   depends_on = [aws_organizations_organization.org]
 
 
-  admin_account_id = var.delegated_admin_account_id
+  admin_account_id = var.delegated_admin_account_id[count.index]
 }
 
 resource "aws_guardduty_detector" "guardduty" {
@@ -132,14 +129,14 @@ resource "aws_s3_bucket_policy" "gd_bucket_policy" {
   count = var.create_org_guardduty ? 1 : 0
 
   bucket = aws_s3_bucket.gd_bucket[0].id
-  policy = data.aws_iam_policy_document.bucket_pol.json
+  policy = data.aws_iam_policy_document.bucket_pol[*].json
 }
 
 module "guardduty_kms_key" {
-  count = var.create_org_guardduty ? 1 : 0
+  count  = var.create_org_guardduty ? 1 : 0
   source = "github.com/Coalfire-CF/terraform-aws-kms"
 
-  key_policy            = data.aws_iam_policy_document.kms_pol.json
+  key_policy            = data.aws_iam_policy_document.kms_pol[*].json
   kms_key_resource_type = "backup"
   resource_prefix       = var.resource_prefix
 }
@@ -150,7 +147,7 @@ resource "aws_guardduty_publishing_destination" "gd_pub_dest" {
 
   detector_id     = aws_guardduty_detector.guardduty[0].id
   destination_arn = aws_s3_bucket.gd_bucket[0].arn
-  kms_key_arn     = module.guardduty_kms_key.arn
+  kms_key_arn     = module.guardduty_kms_key[0].kms_key_arn
 
   depends_on = [
     aws_s3_bucket_policy.gd_bucket_policy[0],
