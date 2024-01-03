@@ -40,7 +40,7 @@ Include example for how to call the module below with generic variables
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "=4.58"
     }
   }
@@ -48,7 +48,7 @@ terraform {
 
 
 module "aws_org" {
-  source                    = "github.com/Coalfire-CF/terraform-aws-organization"
+  source = "github.com/Coalfire-CF/terraform-aws-organization"
   service_access_principals = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
@@ -56,17 +56,17 @@ module "aws_org" {
     "guardduty.amazonaws.com",
     "config-multiaccountsetup.amazonaws.com"
   ]
-  feature_set = "ALL"
+  feature_set                  = "ALL"
   aws_new_member_account_email = ["example@email.com"]
-  aws_new_member_account_name = ["aws_account_12345"]
-  delegated_admin_account_id = "12345678910"
-  delegated_service_principal = "principal"
-  aws_region = var.aws_region
-  partition = var.partition
-  resource_prefix = var.resource_prefix
-  s3_kms_key_arn = data.terraform_remote_state.setup.outputs.s3_key_arn
-  aws_sec_hub_standards_arn = ["arn:${var.partition}:securityhub:${var.region}::standards/cis-aws-foundations-benchmark/v/1.4.0", "arn:${var.partition}:securityhub:${var.region}::standards/aws-foundational-security-best-practices/v/1.0.0"]
-  }
+  aws_new_member_account_name  = ["aws_account_12345"]
+  delegated_admin_account_id   = "12345678910"
+  delegated_service_principal  = "principal"
+  aws_region                   = var.aws_region
+  partition                    = var.partition
+  resource_prefix              = var.resource_prefix
+  s3_kms_key_arn               = data.terraform_remote_state.setup.outputs.s3_key_arn
+  aws_sec_hub_standards_arn    = ["arn:${var.partition}:securityhub:${var.region}::standards/cis-aws-foundations-benchmark/v/1.4.0", "arn:${var.partition}:securityhub:${var.region}::standards/aws-foundational-security-best-practices/v/1.0.0"]
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->

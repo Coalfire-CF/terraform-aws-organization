@@ -8,13 +8,14 @@ resource "aws_organizations_organization" "org" {
 
 resource "aws_organizations_delegated_administrator" "delegated_admin" {
   for_each          = var.delegated_admin_account_id
+
   account_id        = each.value
-  service_principal = var.delegated_service_principal[each.index]
+  service_principal = var.delegated_service_principal[each.key]
 }
 
 resource "aws_organizations_account" "account" {
   for_each = var.aws_new_member_account_email
-  name     = var.aws_new_member_account_name[each.index]
+  name     = var.aws_new_member_account_name[each.key]
   email    = each.value
 }
 
