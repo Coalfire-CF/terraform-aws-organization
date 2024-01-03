@@ -38,10 +38,7 @@ variable "aws_new_member_account_email" {
 
 variable "ou_creation_info" {
   description = "list of names of OU to create and their corresponding delegated admins"
-  type = list(object({
-    ou_name      = string
-    ou_parent_id = string
-  }))
+  type        = map(string)
   default     = null
 }
 

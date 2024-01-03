@@ -138,7 +138,7 @@ No requirements.
 | <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
 | <a name="input_finding_publishing_frequency"></a> [finding\_publishing\_frequency](#input\_finding\_publishing\_frequency) | n/a | `string` | `"ONE_HOUR"` | no |
 | <a name="input_org_account_name"></a> [org\_account\_name](#input\_org\_account\_name) | value to be used for the org account name | `string` | n/a | yes |
-| <a name="input_ou_creation_info"></a> [ou\_creation\_info](#input\_ou\_creation\_info) | list of names of OU to create and their corresponding delegated admins | <pre>list(object({<br>    ou_name      = string<br>    ou_parent_id = string<br>  }))</pre> | `null` | no |
+| <a name="input_ou_creation_info"></a> [ou\_creation\_info](#input\_ou\_creation\_info) | list of names of OU to create and their corresponding delegated admins | `map(string)` | `null` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
 | <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | n/a | `string` | n/a | yes |
 | <a name="input_service_access_principals"></a> [service\_access\_principals](#input\_service\_access\_principals) | List of AWS Service Access Principals that you want to enable for organization integration | `list(string)` | <pre>[<br>  "cloudtrail.amazonaws.com",<br>  "config.amazonaws.com",<br>  "securityhub.amazonaws.com",<br>  "guardduty.amazonaws.com",<br>  "config-multiaccountsetup.amazonaws.com"<br>]</pre> | no |

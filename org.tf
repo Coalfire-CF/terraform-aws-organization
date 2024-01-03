@@ -10,7 +10,7 @@ resource "aws_organizations_delegated_administrator" "delegated_admin" {
   for_each = toset(var.delegated_admin_account_id)
 
   account_id        = each.key
-  service_principal = var.delegated_service_principal[each.value]
+  service_principal = var.delegated_service_principal
 }
 
 resource "aws_organizations_account" "account" {
@@ -21,7 +21,7 @@ resource "aws_organizations_account" "account" {
 }
 
 resource "aws_organizations_organizational_unit" "ou" {
-  for_each = toset(var.ou_creation_info)
+  for_each = var.ou_creation_info
 
   name      = each.value["ou_name"]
   parent_id = each.value["ou_parent_id"]
