@@ -7,26 +7,26 @@ resource "aws_organizations_organization" "org" {
 }
 
 resource "aws_organizations_delegated_administrator" "delegated_admin" {
-  for_each = var.delegated_admin_account_id
+  for_each          = var.delegated_admin_account_id
   account_id        = each.value
   service_principal = var.delegated_service_principal[each.index]
 }
 
 resource "aws_organizations_account" "account" {
-  for_each  = var.aws_new_member_account_email
-  name  = var.aws_new_member_account_name[each.index]
-  email = each.value
+  for_each = var.aws_new_member_account_email
+  name     = var.aws_new_member_account_name[each.index]
+  email    = each.value
 }
 
 resource "aws_organizations_organizational_unit" "ou" {
-  for_each = var.ou_creation_info
+  for_each  = var.ou_creation_info
   name      = each.value["ou_name"]
   parent_id = each.value["ou_parent_id"]
 }
 
 resource "aws_organizations_policy" "scp" {
   content = data.aws_iam_policy_document.scp.json
-  name = "FedModGovSCP"
+  name    = "FedModGovSCP"
 }
 
 resource "aws_organizations_policy_attachment" "scp" {

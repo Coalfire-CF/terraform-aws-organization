@@ -136,7 +136,7 @@ resource "aws_s3_bucket_policy" "gd_bucket_policy" {
 }
 
 module "guardduty_kms_key" {
-  count = var.create_org_guardduty ? 1 : 0
+  count  = var.create_org_guardduty ? 1 : 0
   source = "github.com/Coalfire-CF/terraform-aws-kms"
 
   key_policy            = data.aws_iam_policy_document.kms_pol.json
