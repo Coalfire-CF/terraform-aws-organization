@@ -38,6 +38,10 @@ variable "aws_new_member_account_email" {
 
 variable "ou_creation_info" {
   description = "list of names of OU to create and their corresponding delegated admins"
+  type = list(object({
+    ou_name      = string
+    ou_parent_id = string
+  }))
   default     = null
 }
 
@@ -96,4 +100,9 @@ variable "create_org_cloudtrail" {
 variable "create_org_securityhub" {
   description = "True/False statement whether to enable AWS Security Hub in the Organization"
   default     = true
+}
+
+variable "org_account_name" {
+  description = "value to be used for the org account name"
+  type        = string
 }
