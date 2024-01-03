@@ -21,7 +21,7 @@ resource "aws_organizations_account" "account" {
 }
 
 resource "aws_organizations_organizational_unit" "ou" {
-  for_each = toset(var.ou_creation_info)
+  for_each = var.ou_creation_info
 
   name      = each.value["ou_name"]
   parent_id = each.value["ou_parent_id"]
