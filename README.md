@@ -9,16 +9,13 @@ FedRAMP Compliance: Moderate, High
 
 ## Dependencies
 
-- region-setup
+- Region Setup
 
 ## Resource List
 
 A high-level list of resources created as a part of this module.
 
 - AWS Organization with org level services
-  - Guard Duty
-  - Security Hub
-  - AWS Config
   - Cloudtrail
 - AWS Organization policy
 - IAM role and policy
@@ -52,9 +49,16 @@ module "aws_org" {
   service_access_principals = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
-    "securityhub.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
+    "sso.amazonaws.com",
+    "ssm.amazonaws.com",
+    "servicecatalog.amazonaws.com",
     "guardduty.amazonaws.com",
-    "config-multiaccountsetup.amazonaws.com"
+    "controltower.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "ram.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
   ]
   feature_set                  = "ALL"
   aws_new_member_account_email = ["example@email.com"]
@@ -65,7 +69,6 @@ module "aws_org" {
   partition                    = var.partition
   resource_prefix              = var.resource_prefix
   s3_kms_key_arn               = data.terraform_remote_state.setup.outputs.s3_key_arn
-  aws_sec_hub_standards_arn    = ["arn:${var.partition}:securityhub:${var.region}::standards/cis-aws-foundations-benchmark/v/1.4.0", "arn:${var.partition}:securityhub:${var.region}::standards/aws-foundational-security-best-practices/v/1.0.0"]
 }
 ```
 

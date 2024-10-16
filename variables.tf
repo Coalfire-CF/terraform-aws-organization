@@ -4,9 +4,16 @@ variable "service_access_principals" {
   default = [
     "cloudtrail.amazonaws.com",
     "config.amazonaws.com",
-    "securityhub.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
+    "sso.amazonaws.com",
+    "ssm.amazonaws.com",
+    "servicecatalog.amazonaws.com",
     "guardduty.amazonaws.com",
-    "config-multiaccountsetup.amazonaws.com"
+    "controltower.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "ram.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
   ]
 }
 
@@ -41,11 +48,11 @@ variable "ou_creation_info" {
   type        = map(map(string))
   default = {
     ou1 = {
-      ou_name      = "app_ou1"
+      ou_name      = "mgmt_ou"
       ou_parent_id = "parent_id1"
     },
     ou2 = {
-      ou_name      = "app_ou2"
+      ou_name      = "app_ou"
       ou_parent_id = "parent_id2"
     }
   }
@@ -55,56 +62,20 @@ variable "aws_region" {
   type = string
 }
 
-
 variable "resource_prefix" {
   type = string
-}
-
-variable "finding_publishing_frequency" {
-  type    = string
-  default = "ONE_HOUR"
 }
 
 variable "aws_sec_hub_standards_arn" {
   type = list(string)
 }
 
-variable "aws_guardduty_datasources_enable_S3" {
-  description = "Configuration for the collected datasources."
-  default     = true
-}
-
-variable "aws_guardduty_datasources_enable_k8_audit_logs" {
-  description = "Configuration for the collected datasources."
-  default     = true
-}
-
-variable "aws_guardduty_datasources_enable_malware_protection_ebs" {
-  description = "Configuration for the collected datasources."
-  default     = true
-}
-
 variable "s3_kms_key_arn" {
   type = string
 }
 
-variable "create_org_config" {
-  description = "True/False statement whether to enable AWS Config in the Organization"
-  default     = true
-}
-
-variable "create_org_guardduty" {
-  description = "True/False statement whether to enable AWS GuardDuty in the Organization"
-  default     = true
-}
-
 variable "create_org_cloudtrail" {
   description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
-  default     = true
-}
-
-variable "create_org_securityhub" {
-  description = "True/False statement whether to enable AWS Security Hub in the Organization"
   default     = true
 }
 
