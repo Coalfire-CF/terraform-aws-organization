@@ -20,6 +20,14 @@ A high-level list of resources created as a part of this module.
 - AWS Organization policy
 - IAM role and policy
 
+## Related Repos 
+
+AWS resources that can be used with Organizations
+- [AWS Config](https://github.com/Coalfire-CF/terraform-aws-config)
+- [AWS Guardduty](https://github.com/Coalfire-CF/terraform-aws-guardduty)
+- [AWS SecurityHub](https://github.com/Coalfire-CF/terraform-aws-security-hub)
+- [AWS Control Tower](https://github.com/Coalfire-CF/terraform-aws-control-tower)
+
 ## Deployment Steps
 
 This module can be called as outlined below.
