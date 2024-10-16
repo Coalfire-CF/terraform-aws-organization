@@ -66,17 +66,14 @@ variable "resource_prefix" {
   type = string
 }
 
-variable "aws_sec_hub_standards_arn" {
-  type = list(string)
-}
-
 variable "s3_kms_key_arn" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "create_org_cloudtrail" {
   description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
-  default     = true
+  default     = false
 }
 
 variable "org_account_name" {
