@@ -22,7 +22,7 @@ A high-level list of resources created as a part of this module.
 
 ## Related Repos 
 
-AWS resources that can be used with Organizations
+AWS resources that can be used with Organizations:
 - [AWS Config](https://github.com/Coalfire-CF/terraform-aws-config)
 - [AWS Guardduty](https://github.com/Coalfire-CF/terraform-aws-guardduty)
 - [AWS SecurityHub](https://github.com/Coalfire-CF/terraform-aws-security-hub)
