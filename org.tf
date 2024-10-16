@@ -73,7 +73,7 @@ resource "aws_organizations_resource_policy" "org_resource_policy" {
         "organizations:ListTagsForResource"
       ],
       "Resource": [
-        "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[0].id}/*"]
+        "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/*"]
     }
   ]
 }
