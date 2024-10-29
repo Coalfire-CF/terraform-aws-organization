@@ -32,9 +32,7 @@ data "aws_iam_policy_document" "scp" {
       "ec2:CreateVpc",
       "ec2:AssociateVpcCidrBlock"
     ]
-    resources = [
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:vpc/*"
-    ]
+    resources = ["*"]
     condition {
       test     = "Null"
       variable = "ec2:Ipv4IpamPoolId"
@@ -58,11 +56,9 @@ data "aws_iam_policy_document" "scp" {
 
   ## Enforce EC2 tagging for Ansible inventory
   statement {
-    effect  = "Deny"
-    actions = ["ec2:RunInstances"]
-    resources = [
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:instance/*"
-    ]
+    effect    = "Deny"
+    actions   = ["ec2:RunInstances"]
+    resources = ["*"]
     condition {
       test     = "Null"
       variable = "aws:RequestTag/OSType"
@@ -70,7 +66,6 @@ data "aws_iam_policy_document" "scp" {
     }
   }
 }
-
 
 # data "aws_iam_policy_document" "scp" {
 #   ## Enforce usage of IPAM for creating a VPC
