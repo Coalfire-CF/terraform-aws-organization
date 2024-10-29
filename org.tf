@@ -25,14 +25,14 @@ resource "aws_organizations_organization" "org" {
 #   parent_id = each.value["ou_parent_id"]
 # }
 
-resource "aws_organizations_policy" "scp" {
-  content = data.aws_iam_policy_document.scp.json
-  name    = "FedModGovSCP"
-}
+# resource "aws_organizations_policy" "scp" {
+#   content = data.aws_iam_policy_document.scp.json
+#   name    = "FedModGovSCP"
+# }
 
-resource "aws_organizations_policy_attachment" "scp" {
-  policy_id = aws_organizations_policy.scp.id
-  target_id = aws_organizations_organization.org.id
-}
+# resource "aws_organizations_policy_attachment" "scp" {
+#   policy_id = aws_organizations_policy.scp.id
+#   target_id = aws_organizations_organization.org.id
+# }
 
 
