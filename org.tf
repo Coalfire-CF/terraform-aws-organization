@@ -2,8 +2,6 @@ resource "aws_organizations_organization" "org" {
   aws_service_access_principals = var.service_access_principals
 
   feature_set = var.feature_set
-
-  #enabled_policy_types = var.enabled_policy_types # I want to implement this based off a check of feature_set - if not set to ALL then this is null.
 }
 
 # resource "aws_organizations_delegated_administrator" "delegated_admin" {
@@ -37,45 +35,4 @@ resource "aws_organizations_policy_attachment" "scp" {
   target_id = aws_organizations_organization.org.id
 }
 
-# resource "aws_organizations_resource_policy" "org_resource_policy" {
-#   content = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Sid": "Statement",
-#       "Effect": "Allow",
-#       "Principal": {
-#         "AWS": "arn:${data.aws_partition.current.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
-#       },
-#       "Action": [
-#         "organizations:CreatePolicy",
-#         "organizations:UpdatePolicy",
-#         "organizations:DeletePolicy",
-#         "organizations:AttachPolicy",
-#         "organizations:DetachPolicy",
-#         "organizations:EnablePolicyType",
-#         "organizations:DisablePolicyType",
-#         "organizations:DescribeOrganization",
-#         "organizations:DescribeOrganizationalUnit",
-#         "organizations:DescribeAccount",
-#         "organizations:DescribePolicy",
-#         "organizations:DescribeEffectivePolicy",
-#         "organizations:ListRoots",
-#         "organizations:ListOrganizationalUnitsForParent",
-#         "organizations:ListParents",
-#         "organizations:ListChildren",
-#         "organizations:ListAccounts",
-#         "organizations:ListAccountsForParent",
-#         "organizations:ListPolicies",
-#         "organizations:ListPoliciesForTarget",
-#         "organizations:ListTargetsForPolicy",
-#         "organizations:ListTagsForResource"
-#       ],
-#       "Resource": [
-#         "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[0].id}/*"]
-#     }
-#   ]
-# }
-# EOF
-# }
+
