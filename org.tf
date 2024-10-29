@@ -37,45 +37,45 @@ resource "aws_organizations_policy_attachment" "scp" {
   target_id = aws_organizations_organization.org.id
 }
 
-resource "aws_organizations_resource_policy" "org_resource_policy" {
-  content = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Statement",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:${data.aws_partition.current.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
-      },
-      "Action": [
-        "organizations:CreatePolicy",
-        "organizations:UpdatePolicy",
-        "organizations:DeletePolicy",
-        "organizations:AttachPolicy",
-        "organizations:DetachPolicy",
-        "organizations:EnablePolicyType",
-        "organizations:DisablePolicyType",
-        "organizations:DescribeOrganization",
-        "organizations:DescribeOrganizationalUnit",
-        "organizations:DescribeAccount",
-        "organizations:DescribePolicy",
-        "organizations:DescribeEffectivePolicy",
-        "organizations:ListRoots",
-        "organizations:ListOrganizationalUnitsForParent",
-        "organizations:ListParents",
-        "organizations:ListChildren",
-        "organizations:ListAccounts",
-        "organizations:ListAccountsForParent",
-        "organizations:ListPolicies",
-        "organizations:ListPoliciesForTarget",
-        "organizations:ListTargetsForPolicy",
-        "organizations:ListTagsForResource"
-      ],
-      "Resource": [
-        "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/*"]
-    }
-  ]
-}
-EOF
-}
+# resource "aws_organizations_resource_policy" "org_resource_policy" {
+#   content = <<EOF
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Sid": "Statement",
+#       "Effect": "Allow",
+#       "Principal": {
+#         "AWS": "arn:${data.aws_partition.current.partition}:iam::${aws_organizations_organization.org.roots[0].id}:root"
+#       },
+#       "Action": [
+#         "organizations:CreatePolicy",
+#         "organizations:UpdatePolicy",
+#         "organizations:DeletePolicy",
+#         "organizations:AttachPolicy",
+#         "organizations:DetachPolicy",
+#         "organizations:EnablePolicyType",
+#         "organizations:DisablePolicyType",
+#         "organizations:DescribeOrganization",
+#         "organizations:DescribeOrganizationalUnit",
+#         "organizations:DescribeAccount",
+#         "organizations:DescribePolicy",
+#         "organizations:DescribeEffectivePolicy",
+#         "organizations:ListRoots",
+#         "organizations:ListOrganizationalUnitsForParent",
+#         "organizations:ListParents",
+#         "organizations:ListChildren",
+#         "organizations:ListAccounts",
+#         "organizations:ListAccountsForParent",
+#         "organizations:ListPolicies",
+#         "organizations:ListPoliciesForTarget",
+#         "organizations:ListTargetsForPolicy",
+#         "organizations:ListTagsForResource"
+#       ],
+#       "Resource": [
+#         "arn:${data.aws_partition.current.partition}:organizations::${aws_organizations_organization.org.roots[0].id}:ou/${aws_organizations_organizational_unit.ou[0].id}/*"]
+#     }
+#   ]
+# }
+# EOF
+# }
