@@ -61,27 +61,12 @@ data "aws_iam_policy_document" "scp" {
     effect  = "Deny"
     actions = ["ec2:RunInstances"]
     resources = [
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:instance/*",
-      "arn:${data.aws_partition.current.partition}:ec2:*:*:volume/*"
+      "arn:${data.aws_partition.current.partition}:ec2:*:*:instance/*"
     ]
     condition {
       test     = "Null"
       variable = "aws:RequestTag/OSType"
       values   = ["true"]
-    }
-  }
-
-  ## Deny changing of security tooling IAM role
-  statement {
-    effect  = "Deny"
-    actions = ["iam:DeleteRole", "iam:DeleteRolePolicy"]
-    resources = [
-      "arn:${data.aws_partition.current.partition}:iam::*:role/ops-stack-security-tooling"
-    ]
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:PrincipalARN"
-      values   = ["arn:${data.aws_partition.current.partition}:iam::*:role/tfadmin"]
     }
   }
 }
