@@ -22,6 +22,12 @@ variable "feature_set" {
   default     = "ALL"
 }
 
+variable "enabled_policy_types" {
+  description = "List of Organizations policy types to enable in the Organization Root. Organization must have feature_set set to ALL. For additional information about valid policy types (e.g., AISERVICES_OPT_OUT_POLICY, BACKUP_POLICY, SERVICE_CONTROL_POLICY, and TAG_POLICY)"
+  type        = list(string)
+  default     = [""]
+}
+
 # variable "delegated_admin_account_id" {
 #   description = "The account ID number of the member account in the organization to register as a delegated administrator."
 #   type        = list(string)

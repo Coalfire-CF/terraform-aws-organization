@@ -1,7 +1,8 @@
 resource "aws_organizations_organization" "org" {
   aws_service_access_principals = var.service_access_principals
 
-  feature_set = var.feature_set
+  feature_set          = var.feature_set
+  enabled_policy_types = var.enabled_policy_types
 }
 
 # resource "aws_organizations_delegated_administrator" "delegated_admin" {
