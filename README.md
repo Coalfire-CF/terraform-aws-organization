@@ -80,6 +80,52 @@ module "aws_org" {
 }
 ```
 
+## Service Control Policy Usage
+
+Included in the [available-SCPs](file://available-SCPs) directory are a set of commonly used Service Control Policies, 
+otherwise known as SCPs. These SCPs can be used to strengthen your AWS Organization's security posture 
+
+Each of them can be modified to meet your needs, such as partition changes, additional tags, or any additional roles to be 
+permitted to perform certain actions.
+
+This [link](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_evaluation.html) can help visualize how to assign your SCPs, whether root, OU or account based.
+
+Copy and save any applicable SCP terraform files in the same directory as where you called the terraform-aws-organization module
+
+Below is some examples of how you can use and apply SCPs to your organization.
+
+Creating a policy:
+```terraform
+resource "aws_organizations_policy" "DenyLeavingOrg" {
+  name    = "Prevent member accounts from leaving the organization"
+  content = data.aws_iam_policy_document.example.json
+}
+```
+
+Account targeted SCP
+```hcl
+resource "aws_organizations_policy_attachment" "ProdDenyOrgLeavy" {
+  policy_id = aws_organizations_policy.DenyLeavingOrg.id
+  target_id = "123456789012"
+}
+```
+
+Org Root targeted SCP
+```hcl
+resource "aws_organizations_policy_attachment" "RootDenyOrgLeavy" {
+  policy_id = aws_organizations_policy.DenyLeavingOrg.id
+  target_id = aws_organizations_organization.gov-org.roots[0].id
+}
+```
+
+Org Unit targeted SCP
+```hcl
+resource "aws_organizations_policy_attachment" "ProdOUDenyOrgLeavy" {
+  policy_id = aws_organizations_policy.DenyLeavingOrg.id
+  target_id = aws_organizations_organizational_unit.prod.id
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
