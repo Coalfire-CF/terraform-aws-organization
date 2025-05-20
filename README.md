@@ -1,45 +1,148 @@
 ![Coalfire](coalfire_logo.png)
 
-## ACE AWS Organizations Terraform Module
+> [!WARNING]
+> Module is still in Minimal Viable Product (MVP) state.  
+> Actions to lift out of MVP status:  
+> - Peer deployment and/or review of module & companion configuration role.
+
+# AWS Organizations Terraform Module
+
+# terraform-aws-organization
 
 ## Description
-This module sets up an AWS Organization with org-level services, including Guard Duty, Security Hub, AWS Config, and Cloudtrail.
+
+This module sets up an AWS Organization with org-level services, including GuardDuty, Security Hub, AWS Config, and Cloudtrail.
+
+Note: The AWS Organizations pack may not need to be deployed if the client already has a Root Organization Root account set up in the GovCloud environment.
 
 FedRAMP Compliance: Moderate, High
 
+## Architecture
+
+Architecture diagram coming soon. 
+
 ## Dependencies
 
+- AWS Account Setup: https://github.com/Coalfire-CF/terraform-aws-account-setup
 - Region Setup
 
+## Environment Setup
+
+```hcl
+- Download and install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+- Log into the AWS Console and [create AWS CLI Credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+
+- Configure the named profile used for the project, such as `aws configure --profile example-mgmt`
+```
+
+## Tree
+```
+.
+|-- CONTRIBUTING.md
+|-- License.md
+|-- README.md
+|-- coalfire_logo.png
+|-- update-readme-tree.sh
+```
 ## Resource List
 
-A high-level list of resources created as a part of this module.
+A high-level list of resources created as a part of this module:
 
-- AWS Organization with org level services
-  - Cloudtrail
-- AWS Organization policy
-- IAM role and policy
+- AWS Organization with organization level services (e.g. CloudTrail)
+- AWS Organization Policy 
+- IAM Role and Policy 
 
-## Related Repos 
+## Related Repositories
 
-AWS resources that can be used with Organizations:
-- [AWS Config](https://github.com/Coalfire-CF/terraform-aws-config)
-- [AWS Guardduty](https://github.com/Coalfire-CF/terraform-aws-guardduty)
-- [AWS SecurityHub](https://github.com/Coalfire-CF/terraform-aws-security-hub)
-- [AWS Control Tower](https://github.com/Coalfire-CF/terraform-aws-control-tower)
+AWS resources that can be used with AWS Organizations: 
+- AWS Config: https://github.com/Coalfire-CF/terraform-aws-config
+- AWS GuardDuty: https://github.com/Coalfire-CF/terraform-aws-guardduty
+- AWS Security Hub: https://github.com/Coalfire-CF/terraform-aws-security-hub
+- AWS Control Tower: https://github.com/Coalfire-CF/terraform-aws-control-tower
 
-## Deployment Steps
+#To do: Add narrative on when to use??
 
-This module can be called as outlined below.
+## Code Updates
 
-- Change directories to the `aws-org` directory.
-- From the `terraform/aws/aws-org` directory run `terraform init`.
-- Run `terraform plan` to review the resources being created.
-- If everything looks correct in the plan output, run `terraform apply`.
+- May 2025 - README Updates
+
+
+## Deployment
+
+This section details how an engineer should go about deploying its resources, any key dependencies, and/or deployment configurations.
+
+Example:
+
+1. Navigate to the Terraform project and create a parent directory in the upper level code, for example:
+
+    ```hcl
+    ../aws/terraform/{REGION}/management-account/example
+    ```
+
+   If multi-account management plane:
+
+    ```hcl
+    ../aws/terraform/{REGION}/{ACCOUNT_TYPE}-mgmt-account/example
+    ```
+
+2. Create a new branch. The branch name should provide a high level overview of what you're working on. 
+
+3. Create a properly defined main.tf file via the template found under 'Usage' while adjusting tfvars as needed. Note that many provided variables are outputs from other modules. Example parent directory:
+
+   ```hcl
+   ├── Example/
+   │   ├── prefix.auto.tfvars
+   │   ├── userdata/
+   │   │   ├── script.sh
+   │   ├── data.tf
+   │   ├── locals.tf
+   │   ├── main.tf
+   │   ├── outputs.tf
+   │   ├── providers.tf
+   │   ├── README.md
+   │   ├── remote-data.tf
+   │   ├── required-providers.tf
+   │   ├── userdata.tf
+   │   ├── tstate.tf
+   │   ├── variables.tf
+   │   ├── ...
+   ```
+
+4. Change directories to the `terraform-aws-organization` directory.
+
+5. Ensure that the `prefix.auto.tfvars` variables are correct (especially the profile) or create a new tfvars file with the correct variables
+
+6. Customize code to meet requirements
+
+7. From the `terraform-aws-organization` directory run, initialize the Terraform working directory:
+   ```hcl
+   terraform init
+   ```
+
+8. Standardized formatting in code:
+   ```hcl
+   terraform fmt
+   ```
+
+9. Optional: Ensure proper syntax and "spell check" your code:
+   ```hcl
+   terraform validate
+   ```
+
+10. Create an execution plan and verify everything looks correct:
+   ```hcl
+   terraform plan
+   ```
+
+11. Apply the configuration:
+   ```hcl
+   terraform apply
+   ```
 
 ## Usage
 
-Include example for how to call the module below with generic variables
+Below is an example for how to call the module below with generic variables:
 
 ```hcl
 terraform {
@@ -50,7 +153,6 @@ terraform {
     }
   }
 }
-
 
 module "aws_org" {
   source = "github.com/Coalfire-CF/terraform-aws-organization"
@@ -126,6 +228,14 @@ resource "aws_organizations_policy_attachment" "ProdOUDenyOrgLeavy" {
 }
 ```
 
+## Post Deployment Configuration
+
+WIP - Include the corresponding post deployment confluence page if applicable. Example:
+
+```hcl
+Please refer to the corresponding internal confluence page for this module for post deployment configuration found [here](https://coalfire.atlassian.net/wiki/spaces/CEHOME/pages/3125412613/1.+BurpSuite+Professional+Configuration).
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -133,9 +243,7 @@ No requirements.
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+No providers.
 
 ## Modules
 
@@ -143,50 +251,28 @@ No modules.
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_cloudtrail.org-trail](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail) | resource |
-| [aws_iam_role.aws_config_org_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachment.organization](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_organization) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+No resources.
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
-| <a name="input_create_org_cloudtrail"></a> [create\_org\_cloudtrail](#input\_create\_org\_cloudtrail) | True/False statement whether to enable AWS Cloudtrail in the Organization | `bool` | `false` | no |
-| <a name="input_enabled_policy_types"></a> [enabled\_policy\_types](#input\_enabled\_policy\_types) | List of Organizations policy types to enable in the Organization Root. Organization must have feature\_set set to ALL. For additional information about valid policy types (e.g., AISERVICES\_OPT\_OUT\_POLICY, BACKUP\_POLICY, SERVICE\_CONTROL\_POLICY, and TAG\_POLICY) | `list(string)` | <pre>[<br/>  ""<br/>]</pre> | no |
-| <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
-| <a name="input_org_account_name"></a> [org\_account\_name](#input\_org\_account\_name) | value to be used for the org account name | `string` | n/a | yes |
-| <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
-| <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | n/a | `string` | `null` | no |
-| <a name="input_service_access_principals"></a> [service\_access\_principals](#input\_service\_access\_principals) | List of AWS Service Access Principals that you want to enable for organization integration | `list(string)` | <pre>[<br/>  "cloudtrail.amazonaws.com",<br/>  "config.amazonaws.com",<br/>  "config-multiaccountsetup.amazonaws.com",<br/>  "member.org.stacksets.cloudformation.amazonaws.com",<br/>  "sso.amazonaws.com",<br/>  "ssm.amazonaws.com",<br/>  "servicecatalog.amazonaws.com",<br/>  "guardduty.amazonaws.com",<br/>  "controltower.amazonaws.com",<br/>  "securityhub.amazonaws.com",<br/>  "ram.amazonaws.com",<br/>  "tagpolicies.tag.amazonaws.com"<br/>]</pre> | no |
+No inputs.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_accounts"></a> [accounts](#output\_accounts) | List of org accounts including master |
-| <a name="output_master_account_id"></a> [master\_account\_id](#output\_master\_account\_id) | Master account ID |
+No outputs.
 <!-- END_TF_DOCS -->
 
 ## Contributing
 
-[Relative or absolute link to contributing.md](CONTRIBUTING.md)
-
+[Start Here](CONTRIBUTING.md)
 
 ## License
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/license/mit/)
 
+## Contact Us
 
-## Coalfire Pages
-
-[Absolute link to any relevant Coalfire Pages](https://coalfire.com/)
+[Coalfire](https://coalfire.com/)
 
 ### Copyright
 
