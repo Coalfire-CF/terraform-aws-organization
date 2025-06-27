@@ -8,7 +8,16 @@ output "master_account_id" {
   description = "Master account ID"
 }
 
+output "s3_cloudtrail_bucket_name" {
+  description = "Name of the CloudTrail S3 bucket"
+  value       = "${var.resource_prefix}-${var.aws_region}-org-cloudtrail"
+}
+
+output "cloudtrail_arn" {
+  description = "ARN of the CloudTrail trail"
+  value       = aws_cloudtrail.org-trail[0].arn
+}
+
 output "s3_cloudtrail_arn" {
-  description = "ARN of the CloudTrail S3 bucket"
-  value       = aws_s3_bucket.cloudtrail.arn
+  value = aws_cloudtrail.org-trail[0].arn
 }
