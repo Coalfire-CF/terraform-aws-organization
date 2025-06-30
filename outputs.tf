@@ -19,3 +19,4 @@ output "s3_cloudtrail_bucket_name" {
 output "s3_cloudtrail_bucket_arn" {
   value = "arn:aws:s3:::${var.resource_prefix}-${var.aws_region}-org-cloudtrail"
 }
+
