@@ -7,10 +7,6 @@ This module sets up an AWS Organization with org-level services, including Guard
 
 FedRAMP Compliance: Moderate, High
 
-## Dependencies
-
-- Region Setup
-
 ## Resource List
 
 A high-level list of resources created as a part of this module.
@@ -19,23 +15,8 @@ A high-level list of resources created as a part of this module.
   - Cloudtrail
 - AWS Organization policy
 - IAM role and policy
-
-## Related Repos 
-
-AWS resources that can be used with Organizations:
-- [AWS Config](https://github.com/Coalfire-CF/terraform-aws-config)
-- [AWS Guardduty](https://github.com/Coalfire-CF/terraform-aws-guardduty)
-- [AWS SecurityHub](https://github.com/Coalfire-CF/terraform-aws-security-hub)
-- [AWS Control Tower](https://github.com/Coalfire-CF/terraform-aws-control-tower)
-
-## Deployment Steps
-
-This module can be called as outlined below.
-
-- Change directories to the `aws-org` directory.
-- From the `terraform/aws/aws-org` directory run `terraform init`.
-- Run `terraform plan` to review the resources being created.
-- If everything looks correct in the plan output, run `terraform apply`.
+- KMS keys and typically required IAM permissions for commonly used services (S3, DynamoDB, Config).
+- S3 buckets (ORG CloudTrail, Config, Backups, State)
 
 ## Usage
 
@@ -51,41 +32,40 @@ terraform {
   }
 }
 
-
 module "aws_org" {
   source = "github.com/Coalfire-CF/terraform-aws-organization"
   service_access_principals = [
     "cloudtrail.amazonaws.com",
-    "config.amazonaws.com",
-    "config-multiaccountsetup.amazonaws.com",
     "member.org.stacksets.cloudformation.amazonaws.com",
     "sso.amazonaws.com",
     "ssm.amazonaws.com",
     "servicecatalog.amazonaws.com",
     "guardduty.amazonaws.com",
-    "controltower.amazonaws.com",
     "securityhub.amazonaws.com",
     "ram.amazonaws.com",
     "tagpolicies.tag.amazonaws.com"
   ]
-  feature_set                  = "ALL"
-  aws_new_member_account_email = ["example@email.com"]
-  aws_new_member_account_name  = ["aws_account_12345"]
-  delegated_admin_account_id   = "12345678910"
-  delegated_service_principal  = "principal"
-  aws_region                   = var.aws_region
-  partition                    = var.partition
-  resource_prefix              = var.resource_prefix
-  s3_kms_key_arn               = data.terraform_remote_state.setup.outputs.s3_key_arn
+  org_account_name      = "${var.resource_prefix}-org-root"
+  enabled_policy_types  = ["SERVICE_CONTROL_POLICY"]
+  create_org_cloudtrail = var.create_org_cloudtrail
+  feature_set           = "ALL"
+  aws_region            = var.aws_region
+  default_aws_region    = var.default_aws_region
+  resource_prefix       = var.resource_prefix
+
+  account_number    = var.account_number
+  create_cloudtrail = var.create_cloudtrail
+  is_organization   = var.is_organization
+  organization_id   = var.organization_id
 }
 ```
 
 ## Service Control Policy Usage
 
-Included in the [available-SCPs](file://available-SCPs) directory are a set of commonly used Service Control Policies, 
-otherwise known as SCPs. These SCPs can be used to strengthen your AWS Organization's security posture 
+Included in the [available-SCPs](file://available-SCPs) directory are a set of commonly used Service Control Policies,
+otherwise known as SCPs. These SCPs can be used to strengthen your AWS Organization's security posture
 
-Each of them can be modified to meet your needs, such as partition changes, additional tags, or any additional roles to be 
+Each of them can be modified to meet your needs, such as partition changes, additional tags, or any additional roles to be
 permitted to perform certain actions.
 
 This [link](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_evaluation.html) can help visualize how to assign your SCPs, whether root, OU or account based.
@@ -125,6 +105,112 @@ resource "aws_organizations_policy_attachment" "ProdOUDenyOrgLeavy" {
   target_id = aws_organizations_organizational_unit.prod.id
 }
 ```
+
+## Environment Setup
+
+Establish a secure connection to the Management AWS account used for the build:
+
+```hcl
+IAM user authentication:
+
+- Download and install the AWS CLI (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- Log into the AWS Console and create AWS CLI Credentials (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+- Configure the named profile used for the project, such as 'aws configure --profile example-mgmt'
+
+SSO-based authentication (via IAM Identity Center SSO):
+
+- Login to the AWS IAM Identity Center console, select the permission set for MGMT, and select the 'Access Keys' link.
+- Choose the 'IAM Identity Center credentials' method to get the SSO Start URL and SSO Region values.
+- Run the setup command 'aws configure sso --profile example-mgmt' and follow the prompts.
+- Verify you can run AWS commands successfully, for example 'aws s3 ls --profile example-mgmt'.
+- Run 'export AWS_PROFILE=example-mgmt' in your terminal to use the specific profile and avoid having to use '--profile' option.
+```
+
+## Deployment
+
+1. Navigate to the Terraform project and create a parent directory in the upper level code, for example:
+
+    ```hcl
+    ../{CLOUD}/terraform/{REGION}/management-account/example
+    ```
+   If multi-account management plane:
+
+    ```hcl
+    ../{CLOUD}/terraform/{REGION}/{ACCOUNT_TYPE}-mgmt-account/example
+    ```
+
+2. Create a properly defined main.tf file via the template found under 'Usage' while adjusting 'auto.tfvars' as needed. Example parent directory:
+
+    ```hcl
+     ├── Example/
+     │   ├── example.auto.tfvars   
+     │   ├── main.tf
+     │   ├── outputs.tf
+     │   ├── providers.tf
+     │   ├── required-providers.tf
+     │   ├── remote-data.tf
+     │   ├── variables.tf 
+     │   ├── ...
+     ```
+   Example 'auto.tfvars':
+     ```hcl
+     aws_region         = "us-gov-west-1"
+     default_aws_region = "us-gov-west-1"
+     account_number     = "01010101010101"
+     resource_prefix    = "test-org"
+     create_cloudtrail = true # This is always set to true to create the cloudtrail S3 bucket using account setup PAK
+
+     # Set both to FALSE on first apply, then run again with TRUE to apply the org cloudtrail and organization ID to policies
+     create_org_cloudtrail = false
+     is_organization       = false
+
+     # Uncomment on second run with ORG ID obtained from the output of the first run
+     #organization_id      = ""
+     ```
+
+3. Configure Terraform local backend and stage remote backend. For the first run, the entire contents of the 'remote-data.tf' file must be commented out with terraform local added to facilitate local state setup, like below:
+   ```hcl
+   //terraform {
+   //  backend "s3" {
+   //    bucket         = "{resource_prefix}-{region}-tf-state"
+   //    region         = "{region}"
+   //    key            = "{resource_prefix}-{region}-org-setup.tfstate"
+   //    encrypt        = true
+   //    use_lockfile   = true
+   //  }
+   //}
+   terraform {
+   backend "local"{}
+   }
+   ```
+   
+4. Initialize the Terraform working directory:
+   ```hcl
+   terraform init
+   ```
+   Create an execution plan and verify the resources being created:
+   ```hcl
+   terraform plan
+   ```
+   Apply the configuration:
+   ```hcl
+   terraform apply
+   ```
+
+5. After the deployment has succeeded, uncomment the contents of 'remote-state.tf' and remove the terraform local code block.
+
+6. Follow the directions on the example 'auto.tfvars' previously provided to create cloudtrail and update policies. You will need to update 'create_org_cloudtrail' and 'is_organization' to 'true' while uncommenting and adding 'organization_id' value.
+
+7. Create an execution plan and verify the resources being created:
+   ```hcl
+   terraform plan
+   ```
+   Apply the configuration:
+   ```hcl
+   terraform apply
+   ```
+
+8. Run 'terraform init -migrate-state' and follow the prompts to migrate the local state file to the appropriate S3 bucket in the AWS Master Payer account.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
