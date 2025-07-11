@@ -227,7 +227,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_account-setup"></a> [account-setup](#module\_account-setup) | ../terraform-aws-account-setup | n/a |
+| <a name="module_account-setup"></a> [account-setup](#module\_account-setup) | github.com/Coalfire-CF/terraform-aws-account-setup | v0.0.42 |
 
 ## Resources
 
