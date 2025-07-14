@@ -20,7 +20,7 @@ module "account-setup" {
 
   # Keep the necessary KMS keys but disable others to simplify
   create_s3_kms_key     = true
-  create_dynamo_kms_key = true
+  # create_dynamo_kms_key = true
   create_ebs_kms_key    = false
   create_sns_kms_key    = false
   create_lambda_kms_key = false
@@ -43,7 +43,7 @@ module "account-setup" {
   ]
 
   #FAUPDATE: This as an optional argument being added in case that the autoscaling role has already been created in an account (such as the testing lab). Default will always be true.
-  create_autoscaling_role = false
+  # create_autoscaling_role = false
 }
 
 data "aws_iam_policy_document" "controltower_kms" {
