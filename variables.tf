@@ -71,6 +71,11 @@ variable "enabled_policy_types" {
   default     = [""]
 }
 
+variable "mgmt_account_id" {
+  description = "Account ID if the MGMT plane"
+  type = string
+}
+
 # variable "delegated_admin_account_id" {
 #   description = "The account ID number of the member account in the organization to register as a delegated administrator."
 #   type        = list(string)

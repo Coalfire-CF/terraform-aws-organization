@@ -54,6 +54,7 @@ module "aws_org" {
   resource_prefix       = var.resource_prefix
 
   account_number    = var.account_number
+  mgmt_account_id   = var.mgmt_account_id
   create_cloudtrail = var.create_cloudtrail
   is_organization   = var.is_organization
   organization_id   = var.organization_id
@@ -258,6 +259,7 @@ No requirements.
 | <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | AWS Organization ID | `string` | n/a | yes |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
 | <a name="input_service_access_principals"></a> [service\_access\_principals](#input\_service\_access\_principals) | List of AWS Service Access Principals that you want to enable for organization integration | `list(string)` | <pre>[<br/>  "cloudtrail.amazonaws.com",<br/>  "config.amazonaws.com",<br/>  "config-multiaccountsetup.amazonaws.com",<br/>  "member.org.stacksets.cloudformation.amazonaws.com",<br/>  "sso.amazonaws.com",<br/>  "ssm.amazonaws.com",<br/>  "servicecatalog.amazonaws.com",<br/>  "guardduty.amazonaws.com",<br/>  "controltower.amazonaws.com",<br/>  "securityhub.amazonaws.com",<br/>  "ram.amazonaws.com",<br/>  "tagpolicies.tag.amazonaws.com"<br/>]</pre> | no |
+| <a name="mgmt_account_id"></a> [mgmt\_account\_id](#input\_mgmt\_account\_id) | AWS Account ID of the MGMT plane account. Used to delegate admin from the Org account. | `string` | n/a | yes |
 
 ## Outputs
 
