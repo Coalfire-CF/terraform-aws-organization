@@ -20,7 +20,7 @@ A high-level list of resources created as a part of this module.
 
 ## Usage
 
-Include example for how to call the module below with generic variables
+Example for how to call the module below with generic variables:
 
 ```hcl
 terraform {
@@ -57,6 +57,83 @@ module "aws_org" {
   create_cloudtrail = var.create_cloudtrail
   is_organization   = var.is_organization
   organization_id   = var.organization_id
+}
+```
+
+For org deployments where a delegated admin is required/needed:
+```
+module "org" {
+  ## update source once branch is merged into main
+  source = "git::https://github.com/Coalfire-CF/terraform-aws-organization.git?ref=fa-aws-pakpt-update"
+
+  service_access_principals = [
+    "cloudtrail.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
+    "sso.amazonaws.com",
+    "ssm.amazonaws.com",
+    "servicecatalog.amazonaws.com",
+    "guardduty.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "ram.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
+  ]
+
+  org_account_name      = "${var.resource_prefix}-org-root"
+  enabled_policy_types  = ["SERVICE_CONTROL_POLICY"]
+  create_org_cloudtrail = var.create_org_cloudtrail
+  feature_set           = "ALL"
+  aws_region            = var.aws_region
+  default_aws_region    = var.default_aws_region
+  resource_prefix       = var.resource_prefix
+
+  account_number    = var.account_number
+  create_cloudtrail = var.create_cloudtrail
+  is_organization   = var.is_organization
+  organization_id   = var.organization_id
+}
+
+## Full Delegate Admin Policy ##
+resource "aws_organizations_resource_policy" "admin_delegate" {
+
+  content = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DelegatingAdmin",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:${local.partition}:iam::${local.mgmt_plane_account_id}:root"
+      },
+      "Action": [
+        "organizations:CreatePolicy",
+        "organizations:UpdatePolicy",
+        "organizations:DeletePolicy",
+        "organizations:AttachPolicy",
+        "organizations:DetachPolicy",
+        "organizations:EnablePolicyType",
+        "organizations:DisablePolicyType",
+        "organizations:DescribeOrganization",
+        "organizations:DescribeOrganizationalUnit",
+        "organizations:DescribeAccount",
+        "organizations:DescribePolicy",
+        "organizations:DescribeEffectivePolicy",
+        "organizations:ListRoots",
+        "organizations:ListOrganizationalUnitsForParent",
+        "organizations:ListParents",
+        "organizations:ListChildren",
+        "organizations:ListAccounts",
+        "organizations:ListAccountsForParent",
+        "organizations:ListPolicies",
+        "organizations:ListPoliciesForTarget",
+        "organizations:ListTargetsForPolicy",
+        "organizations:ListTagsForResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 ```
 
