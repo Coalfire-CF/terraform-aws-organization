@@ -6,6 +6,13 @@ resource "aws_organizations_organization" "org" {
   enabled_policy_types = var.enabled_policy_types
 }
 
+resource "null_resource" "add_org_account" {
+  count = var.child_accounts == null ? 0 : length(var.child_accounts)
+  provisioner "local-exec" {
+    command = "aws organizations invite-account-to-organization --target '{\"Type\": \"ACCOUNT\", \"Id\": \"${var.child_accounts[count.index]}\"}' & sleep 10"
+  }
+}
+
 # resource "aws_organizations_delegated_administrator" "delegated_admin" {
 #   for_each = toset(var.delegated_admin_account_id)
 
