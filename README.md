@@ -392,6 +392,11 @@ No requirements.
 | <a name="output_sns_kms_key_id"></a> [sns\_kms\_key\_id](#output\_sns\_kms\_key\_id) | n/a |
 <!-- END_TF_DOCS -->
 
+## Post Deployment Configuration
+```
+If you use the `child_accounts` variable, you must accept the invites to the orgainzation within each account that you sent and invite to.
+```
+
 ## Contributing
 
 [Relative or absolute link to contributing.md](CONTRIBUTING.md)
