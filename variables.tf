@@ -71,11 +71,6 @@ variable "enabled_policy_types" {
   default     = [""]
 }
 
-variable "child_accounts" {
-  description = "AWS Account IDs you want to add to the organization"
-  type = list(string)
-  default = null
-}
 
 # variable "delegated_admin_account_id" {
 #   description = "The account ID number of the member account in the organization to register as a delegated administrator."

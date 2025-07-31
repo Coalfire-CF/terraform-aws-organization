@@ -394,7 +394,7 @@ No requirements.
 
 ## Post Deployment Configuration
 ```
-If you use the `child_accounts` variable, you must accept the invites to the orgainzation within each account that you sent and invite to.
+Ensure you invite other AWS accounts to the organization, then accept the invitations in each child account.
 ```
 
 ## Contributing
