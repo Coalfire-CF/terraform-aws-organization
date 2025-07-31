@@ -389,6 +389,11 @@ No requirements.
 | <a name="output_sns_kms_key_id"></a> [sns\_kms\_key\_id](#output\_sns\_kms\_key\_id) | n/a |
 <!-- END_TF_DOCS -->
 
+## Post Deployment Configuration
+```
+Ensure you invite other AWS accounts to the organization, then accept the invitations in each child account.
+```
+
 ## Contributing
 
 [Relative or absolute link to contributing.md](CONTRIBUTING.md)
