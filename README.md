@@ -289,6 +289,11 @@ SSO-based authentication (via IAM Identity Center SSO):
 
 8. Run 'terraform init -migrate-state' and follow the prompts to migrate the local state file to the appropriate S3 bucket in the AWS Master Payer account.
 
+## Post Deployment Configuration
+```
+Ensure you invite other AWS accounts to the organization, then accept the invitations in each child account.
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -388,11 +393,6 @@ No requirements.
 | <a name="output_sns_kms_key_arn"></a> [sns\_kms\_key\_arn](#output\_sns\_kms\_key\_arn) | n/a |
 | <a name="output_sns_kms_key_id"></a> [sns\_kms\_key\_id](#output\_sns\_kms\_key\_id) | n/a |
 <!-- END_TF_DOCS -->
-
-## Post Deployment Configuration
-```
-Ensure you invite other AWS accounts to the organization, then accept the invitations in each child account.
-```
 
 ## Contributing
 
