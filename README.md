@@ -294,7 +294,7 @@ SSO-based authentication (via IAM Identity Center SSO):
 Ensure you invite other AWS accounts to the organization, then accept the invitations in each child account.
 ```
 ```
-Depending on the context of the build out of this module, the role OrganizationAccountAccessRole may need to be manually created in each child project. The trust relationship of this role must include other AWS accounts that use cross project resource provisioning.
+Depending on the context of the build out of this module, the role OrganizationAccountAccessRole may need to be manually created in each child project. The trust relationship of this role must include other AWS accounts that use cross project resource provisioning. See reference https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create-cross-account-role.html
 ```
 
 <!-- BEGIN_TF_DOCS -->
