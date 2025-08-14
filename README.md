@@ -43,7 +43,8 @@ module "aws_org" {
     "guardduty.amazonaws.com",
     "securityhub.amazonaws.com",
     "ram.amazonaws.com",
-    "tagpolicies.tag.amazonaws.com"
+    "tagpolicies.tag.amazonaws.com",
+    "config.amazonaws.com",
   ]
   org_account_name      = "${var.resource_prefix}-org-root"
   enabled_policy_types  = ["SERVICE_CONTROL_POLICY"]
@@ -75,7 +76,8 @@ module "org" {
     "guardduty.amazonaws.com",
     "securityhub.amazonaws.com",
     "ram.amazonaws.com",
-    "tagpolicies.tag.amazonaws.com"
+    "tagpolicies.tag.amazonaws.com",
+    "config.amazonaws.com",
   ]
 
   org_account_name      = "${var.resource_prefix}-org-root"
