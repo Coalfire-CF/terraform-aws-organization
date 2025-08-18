@@ -1,144 +1,22 @@
 ![Coalfire](coalfire_logo.png)
 
-> [!WARNING]
-> Module is still in Minimal Viable Product (MVP) state.  
-> Actions to lift out of MVP status:  
-> - Peer deployment and/or review of module & companion configuration role.
-
-# AWS Organizations Terraform Module
-
-# terraform-aws-organization
+## ACE AWS Organizations Terraform Module
 
 ## Description
-
-This module sets up an AWS Organization with org-level services, including GuardDuty, Security Hub, AWS Config, and Cloudtrail.
-
-Note: The AWS Organizations pack may not need to be deployed if the client already has a Root Organization Root account set up in the GovCloud environment.
+This module sets up an AWS Organization with org-level services, including Guard Duty, Security Hub, AWS Config, and Cloudtrail.
 
 FedRAMP Compliance: Moderate, High
 
-## Architecture
-
-Architecture diagram coming soon. 
-
-## Dependencies
-
-- AWS Account Setup: https://github.com/Coalfire-CF/terraform-aws-account-setup
-- Region Setup
-
-## Environment Setup
-
-```hcl
-- Download and install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-
-- Log into the AWS Console and [create AWS CLI Credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
-
-- Configure the named profile used for the project, such as `aws configure --profile example-mgmt`
-```
-
-## Tree
-```
-.
-|-- CONTRIBUTING.md
-|-- License.md
-|-- README.md
-|-- coalfire_logo.png
-|-- update-readme-tree.sh
-```
 ## Resource List
 
-A high-level list of resources created as a part of this module:
+A high-level list of resources created as a part of this module.
 
-- AWS Organization with organization level services (e.g. CloudTrail)
-- AWS Organization Policy 
-- IAM Role and Policy 
-
-## Related Repositories
-
-AWS resources that can be used with AWS Organizations: 
-- AWS Config: https://github.com/Coalfire-CF/terraform-aws-config
-- AWS GuardDuty: https://github.com/Coalfire-CF/terraform-aws-guardduty
-- AWS Security Hub: https://github.com/Coalfire-CF/terraform-aws-security-hub
-- AWS Control Tower: https://github.com/Coalfire-CF/terraform-aws-control-tower
-
-#To do: Add narrative on when to use??
-
-## Code Updates
-
-- May 2025 - README Updates
-
-
-## Deployment
-
-This section details how an engineer should go about deploying its resources, any key dependencies, and/or deployment configurations.
-
-Example:
-
-1. Navigate to the Terraform project and create a parent directory in the upper level code, for example:
-
-    ```hcl
-    ../aws/terraform/{REGION}/management-account/example
-    ```
-
-   If multi-account management plane:
-
-    ```hcl
-    ../aws/terraform/{REGION}/{ACCOUNT_TYPE}-mgmt-account/example
-    ```
-
-2. Create a new branch. The branch name should provide a high level overview of what you're working on. 
-
-3. Create a properly defined main.tf file via the template found under 'Usage' while adjusting tfvars as needed. Note that many provided variables are outputs from other modules. Example parent directory:
-
-   ```hcl
-   ├── Example/
-   │   ├── prefix.auto.tfvars
-   │   ├── userdata/
-   │   │   ├── script.sh
-   │   ├── data.tf
-   │   ├── locals.tf
-   │   ├── main.tf
-   │   ├── outputs.tf
-   │   ├── providers.tf
-   │   ├── README.md
-   │   ├── remote-data.tf
-   │   ├── required-providers.tf
-   │   ├── userdata.tf
-   │   ├── tstate.tf
-   │   ├── variables.tf
-   │   ├── ...
-   ```
-
-4. Change directories to the `terraform-aws-organization` directory.
-
-5. Ensure that the `prefix.auto.tfvars` variables are correct (especially the profile) or create a new tfvars file with the correct variables
-
-6. Customize code to meet requirements
-
-7. From the `terraform-aws-organization` directory run, initialize the Terraform working directory:
-   ```hcl
-   terraform init
-   ```
-
-8. Standardized formatting in code:
-   ```hcl
-   terraform fmt
-   ```
-
-9. Optional: Ensure proper syntax and "spell check" your code:
-   ```hcl
-   terraform validate
-   ```
-
-10. Create an execution plan and verify everything looks correct:
-   ```hcl
-   terraform plan
-   ```
-
-11. Apply the configuration:
-   ```hcl
-   terraform apply
-   ```
+- AWS Organization with org level services
+  - Cloudtrail
+- AWS Organization policy
+- IAM role and policy
+- KMS keys and typically required IAM permissions for commonly used services (S3, DynamoDB, Config).
+- S3 buckets (ORG CloudTrail, Config, Backups, State)
 
 ## Usage
 
@@ -448,17 +326,13 @@ No requirements.
 | [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/organizations_organization) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-<<<<<<< HEAD
 | [aws_iam_policy_document.controltower_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-=======
->>>>>>> 1a897c19e4e769a2599dc66f254b45ff5f0131de
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-<<<<<<< HEAD
 | <a name="input_account_number"></a> [account\_number](#input\_account\_number) | The AWS account number resources are being deployed into | `string` | n/a | yes |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
 | <a name="input_create_cloudtrail"></a> [create\_cloudtrail](#input\_create\_cloudtrail) | Whether or not to create cloudtrail resources | `bool` | n/a | yes |
@@ -470,15 +344,6 @@ No requirements.
 | <a name="input_org_account_name"></a> [org\_account\_name](#input\_org\_account\_name) | value to be used for the org account name | `string` | n/a | yes |
 | <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | AWS Organization ID | `string` | n/a | yes |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
-=======
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
-| <a name="input_create_org_cloudtrail"></a> [create\_org\_cloudtrail](#input\_create\_org\_cloudtrail) | True/False statement whether to enable AWS Cloudtrail in the Organization | `bool` | `false` | no |
-| <a name="input_enabled_policy_types"></a> [enabled\_policy\_types](#input\_enabled\_policy\_types) | List of Organizations policy types to enable in the Organization Root. Organization must have feature\_set set to ALL. For additional information about valid policy types (e.g., AISERVICES\_OPT\_OUT\_POLICY, BACKUP\_POLICY, SERVICE\_CONTROL\_POLICY, and TAG\_POLICY) | `list(string)` | <pre>[<br/>  ""<br/>]</pre> | no |
-| <a name="input_feature_set"></a> [feature\_set](#input\_feature\_set) | Feature set to be used with Org and member accounts Specify ALL(default) or CONSOLIDATED\_BILLING. | `string` | `"ALL"` | no |
-| <a name="input_org_account_name"></a> [org\_account\_name](#input\_org\_account\_name) | value to be used for the org account name | `string` | n/a | yes |
-| <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | n/a | `string` | n/a | yes |
-| <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | n/a | `string` | `null` | no |
->>>>>>> 1a897c19e4e769a2599dc66f254b45ff5f0131de
 | <a name="input_service_access_principals"></a> [service\_access\_principals](#input\_service\_access\_principals) | List of AWS Service Access Principals that you want to enable for organization integration | `list(string)` | <pre>[<br/>  "cloudtrail.amazonaws.com",<br/>  "config.amazonaws.com",<br/>  "config-multiaccountsetup.amazonaws.com",<br/>  "member.org.stacksets.cloudformation.amazonaws.com",<br/>  "sso.amazonaws.com",<br/>  "ssm.amazonaws.com",<br/>  "servicecatalog.amazonaws.com",<br/>  "guardduty.amazonaws.com",<br/>  "controltower.amazonaws.com",<br/>  "securityhub.amazonaws.com",<br/>  "ram.amazonaws.com",<br/>  "tagpolicies.tag.amazonaws.com"<br/>]</pre> | no |
 
 ## Outputs
@@ -486,7 +351,6 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | <a name="output_accounts"></a> [accounts](#output\_accounts) | List of org accounts including master |
-<<<<<<< HEAD
 | <a name="output_additional_kms_key_arns"></a> [additional\_kms\_key\_arns](#output\_additional\_kms\_key\_arns) | n/a |
 | <a name="output_additional_kms_key_ids"></a> [additional\_kms\_key\_ids](#output\_additional\_kms\_key\_ids) | n/a |
 | <a name="output_backup_kms_key_arn"></a> [backup\_kms\_key\_arn](#output\_backup\_kms\_key\_arn) | n/a |
@@ -533,25 +397,21 @@ No requirements.
 | <a name="output_sm_kms_key_id"></a> [sm\_kms\_key\_id](#output\_sm\_kms\_key\_id) | n/a |
 | <a name="output_sns_kms_key_arn"></a> [sns\_kms\_key\_arn](#output\_sns\_kms\_key\_arn) | n/a |
 | <a name="output_sns_kms_key_id"></a> [sns\_kms\_key\_id](#output\_sns\_kms\_key\_id) | n/a |
-=======
-| <a name="output_cloudtrail_arn"></a> [cloudtrail\_arn](#output\_cloudtrail\_arn) | n/a |
-| <a name="output_master_account_id"></a> [master\_account\_id](#output\_master\_account\_id) | Master account ID |
-| <a name="output_s3_cloudtrail_bucket_arn"></a> [s3\_cloudtrail\_bucket\_arn](#output\_s3\_cloudtrail\_bucket\_arn) | n/a |
-| <a name="output_s3_cloudtrail_bucket_name"></a> [s3\_cloudtrail\_bucket\_name](#output\_s3\_cloudtrail\_bucket\_name) | n/a |
->>>>>>> 1a897c19e4e769a2599dc66f254b45ff5f0131de
 <!-- END_TF_DOCS -->
 
 ## Contributing
 
-[Start Here](CONTRIBUTING.md)
+[Relative or absolute link to contributing.md](CONTRIBUTING.md)
+
 
 ## License
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/license/mit/)
 
-## Contact Us
 
-[Coalfire](https://coalfire.com/)
+## Coalfire Pages
+
+[Absolute link to any relevant Coalfire Pages](https://coalfire.com/)
 
 ### Copyright
 
