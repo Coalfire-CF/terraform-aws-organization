@@ -1,3 +1,46 @@
+variable "aws_region" {
+  type = string
+}
+
+variable "resource_prefix" {
+  type = string
+}
+
+variable "create_org_cloudtrail" {
+  description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
+  type        = bool
+}
+
+variable "org_account_name" {
+  description = "value to be used for the org account name"
+  type        = string
+}
+
+variable "default_aws_region" {
+  description = "The default AWS region to create resources in"
+  type        = string
+}
+
+variable "account_number" {
+  description = "The AWS account number resources are being deployed into"
+  type        = string
+}
+
+variable "create_cloudtrail" {
+  description = "Whether or not to create cloudtrail resources"
+  type        = bool
+}
+
+variable "is_organization" {
+  description = "Whether or not to enable certain settings for AWS Organization"
+  type        = bool
+}
+
+variable "organization_id" {
+  description = "AWS Organization ID"
+  type        = string
+}
+
 variable "service_access_principals" {
   description = "List of AWS Service Access Principals that you want to enable for organization integration"
   type        = list(string)
@@ -63,26 +106,3 @@ variable "enabled_policy_types" {
 #     }
 #   }
 # }
-
-variable "aws_region" {
-  type = string
-}
-
-variable "resource_prefix" {
-  type = string
-}
-
-variable "s3_kms_key_arn" {
-  type    = string
-  default = null
-}
-
-variable "create_org_cloudtrail" {
-  description = "True/False statement whether to enable AWS Cloudtrail in the Organization"
-  default     = false
-}
-
-variable "org_account_name" {
-  description = "value to be used for the org account name"
-  type        = string
-}
