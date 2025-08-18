@@ -187,3 +187,16 @@ output "eks_node_role_arn" {
 output "eks_node_role_name" {
   value = try(module.account_setup.eks_node_role_name, null)
 }
+
+output "cloudtrail_arn" {
+  value = aws_cloudtrail.org-trail[0].arn
+}
+
+output "s3_cloudtrail_bucket_name" {
+  value = "${var.resource_prefix}-${var.aws_region}-org-cloudtrail"
+}
+
+output "s3_cloudtrail_bucket_arn" {
+  value = "arn:aws:s3:::${var.resource_prefix}-${var.aws_region}-org-cloudtrail"
+}
+
