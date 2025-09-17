@@ -1,0 +1,34 @@
+{
+  "packages": {
+    ".": {
+      "bump-minor-pre-major": true,
+      "changelog-path": "CHANGELOG.md",
+      "changelog-sections": [
+        {
+          "hidden": false,
+          "section": "Features",
+          "type": "feat"
+        },
+        {
+          "hidden": false,
+          "section": "Bug Fixes",
+          "type": "fix"
+        },
+        {
+          "hidden": false,
+          "section": "Miscellaneous",
+          "type": "chore"
+        },
+        {
+          "hidden": false,
+          "section": "Documentation",
+          "type": "docs"
+        }
+      ],
+      "draft": false,
+      "extra-files": [],
+      "release-type": "terraform-module",
+      "versioning": "default"
+    }
+  }
+}
