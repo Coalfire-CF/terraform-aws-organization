@@ -46,7 +46,9 @@ module "aws_org" {
     "ram.amazonaws.com",
     "tagpolicies.tag.amazonaws.com",
     "config.amazonaws.com",
+    "backup.amazonaws.com"
   ]
+  
   org_account_name      = "${var.resource_prefix}-org-root"
   enabled_policy_types  = ["SERVICE_CONTROL_POLICY"]
   create_org_cloudtrail = var.create_org_cloudtrail
