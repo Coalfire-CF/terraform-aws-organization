@@ -42,7 +42,7 @@ module "account_setup" {
     }
   ]
 
-  #FAUPDATE: This as an optional argument being added in case that the autoscaling role has already been created in an account (such as the testing lab). Default will always be true.
+  # This as an optional argument being added in case that the autoscaling role has already been created in an account (such as the testing lab). Default will always be true.
   # create_autoscaling_role = false
 }
 
