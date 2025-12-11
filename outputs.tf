@@ -9,7 +9,7 @@ output "master_account_id" {
 }
 
 output "org_id" {
-  value = aws_organizations_organization.org.id
+  value       = aws_organizations_organization.org.id
   description = "Organization ID"
 }
 
