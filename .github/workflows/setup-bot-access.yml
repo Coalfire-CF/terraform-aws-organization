@@ -1,0 +1,141 @@
+# https://coalfire.atlassian.net/wiki/spaces/CEHOME/pages/3484221541/Github+Bot+User+Coalfire-Bot-User-CF
+# This workflow is intended to invite the Coalfire Github Bot User as an Outside Collaborator in order to grant read-only access to
+# specific private repositories.
+# This workflow is unnecessary if this repository is changed from Private => Public as it will not (and should not) run
+# since the secrets should only be available to Private repositories
+
+# This a manual workflow (it only ever needs to be run just once)
+name: Setup Bot Access
+on:
+  workflow_dispatch:
+
+env:
+  BOT_USERNAME: "Coalfire-Bot-User-CF"
+  BOT_PERMISSION: "read" # There shouldn't be a practical need to change this
+
+jobs:
+  add-bot-collaborator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Checkout Token
+        id: checkout-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.COALFIRE_BOT_USER_APP_CLIENT_ID }}
+          private-key: ${{ secrets.COALFIRE_BOT_USER_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          
+      - name: Add bot as external collaborator
+        id: invite-bot
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ steps.checkout-token.outputs.token }}
+          script: |
+            const botUsername = process.env.BOT_USERNAME;
+            const permission = process.env.BOT_PERMISSION;
+            
+            try {
+              // Check if bot is already a collaborator
+              await github.rest.repos.checkCollaborator({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: botUsername
+              });
+              
+              console.log(`${botUsername} is already a collaborator`);
+              core.setOutput('already-collaborator', 'true');
+              return;
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+              console.log(`${botUsername} is not a collaborator, adding...`);
+            }
+            
+            // Add bot as collaborator
+            const response = await github.rest.repos.addCollaborator({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: botUsername,
+              permission: permission
+            });
+            
+            console.log(`Invited ${botUsername} with ${permission} permission`);
+            core.setOutput('invitation-sent', 'true');
+            core.setOutput('invitation-id', response.data.id || 'unknown');
+
+      - name: Accept invitation as bot
+        if: steps.invite-bot.outputs.invitation-sent == 'true'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.COALFIRE_BOT_USER_CLASSIC_PAT}}
+          script: |
+            const maxRetries = 5;
+            const retryDelay = 2000; // 2 seconds
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+              try {
+                console.log(`Attempt ${attempt}: Fetching pending invitations...`);
+                
+                // Get pending invitations for the bot
+                const invitations = await github.rest.repos.listInvitationsForAuthenticatedUser();
+                
+                // Find invitation for this repository
+                const invitation = invitations.data.find(inv => 
+                  inv.repository.owner.login === context.repo.owner &&
+                  inv.repository.name === context.repo.repo
+                );
+                
+                if (invitation) {
+                  console.log(`Found invitation ${invitation.id}, accepting...`);
+                  
+                  // Accept the invitation
+                  await github.rest.repos.acceptInvitationForAuthenticatedUser({
+                    invitation_id: invitation.id
+                  });
+                  
+                  console.log(`Successfully accepted invitation for ${context.repo.owner}/${context.repo.repo}`);
+                  break;
+                } else {
+                  console.log(`No invitation found for ${context.repo.owner}/${context.repo.repo}`);
+                  
+                  if (attempt < maxRetries) {
+                    console.log(`Waiting ${retryDelay}ms before retry...`);
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                  }
+                }
+              } catch (error) {
+                console.error(`Attempt ${attempt} failed:`, error.message);
+                
+                if (attempt < maxRetries) {
+                  console.log(`Waiting ${retryDelay}ms before retry...`);
+                  await new Promise(resolve => setTimeout(resolve, retryDelay));
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+      - name: Verify bot access
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ steps.checkout-token.outputs.token }}
+          script: |
+            const botUsername = process.env.BOT_USERNAME;
+            
+            try {
+              const response = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: botUsername
+              });
+              
+              console.log(`Bot ${botUsername} has ${response.data.permission} access to ${context.repo.owner}/${context.repo.repo}`);
+              
+              if (response.data.permission === 'none') {
+                core.setFailed('Bot does not have access to the repository');
+              }
+            } catch (error) {
+              console.error('Failed to verify bot access:', error.message);
+              core.setFailed('Could not verify bot access');
+            }

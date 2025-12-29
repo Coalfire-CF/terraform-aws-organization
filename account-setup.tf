@@ -1,5 +1,5 @@
 module "account_setup" {
-  source = "github.com/Coalfire-CF/terraform-aws-account-setup?ref=v0.0.42"
+  source = "git::https://github.com/Coalfire-CF/terraform-aws-account-setup?ref=v0.0.42"
 
   aws_region         = var.aws_region
   default_aws_region = var.default_aws_region
@@ -42,7 +42,7 @@ module "account_setup" {
     }
   ]
 
-  #FAUPDATE: This as an optional argument being added in case that the autoscaling role has already been created in an account (such as the testing lab). Default will always be true.
+  # This as an optional argument being added in case that the autoscaling role has already been created in an account (such as the testing lab). Default will always be true.
   # create_autoscaling_role = false
 }
 
