@@ -71,17 +71,18 @@ module "org" {
   source = "git::https://github.com/Coalfire-CF/terraform-aws-organization.git?ref=fa-aws-pakpt-update"
 
   service_access_principals = [
+    "backup.amazonaws.com",
+    "config.amazonaws.com",
     "cloudtrail.amazonaws.com",
-    "member.org.stacksets.cloudformation.amazonaws.com",
-    "sso.amazonaws.com",
-    "ssm.amazonaws.com",
-    "servicecatalog.amazonaws.com",
     "guardduty.amazonaws.com",
     "malware-protection.guardduty.amazonaws.com",
-    "securityhub.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
     "ram.amazonaws.com",
-    "tagpolicies.tag.amazonaws.com",
-    "config.amazonaws.com",
+    "securityhub.amazonaws.com",
+    "servicecatalog.amazonaws.com",
+    "ssm.amazonaws.com",
+    "sso.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
   ]
 
   org_account_name      = "${var.resource_prefix}-org-root"
