@@ -70,39 +70,3 @@ variable "enabled_policy_types" {
   type        = list(string)
   default     = [""]
 }
-
-# variable "delegated_admin_account_id" {
-#   description = "The account ID number of the member account in the organization to register as a delegated administrator."
-#   type        = list(string)
-#   default     = null
-# }
-
-# variable "delegated_service_principal" {
-#   description = "The service principal of the AWS service for which you want to make the member account a delegated administrator."
-#   default     = "principal"
-# }
-
-# variable "aws_new_member_account_name" {
-#   description = "The Friendly name for the member account."
-#   default     = null
-# }
-
-# variable "aws_new_member_account_email" {
-#   description = "The Email address of the owner to assign to the new member account. This email address must not already be associated with another AWS account."
-#   default     = null
-# }
-
-# variable "ou_creation_info" {
-#   description = "list of names of OU to create and their corresponding delegated admins"
-#   type        = map(map(string))
-#   default = {
-#     ou1 = {
-#       ou_name      = "mgmt_ou"
-#       ou_parent_id = "parent_id1"
-#     },
-#     ou2 = {
-#       ou_name      = "app_ou"
-#       ou_parent_id = "parent_id2"
-#     }
-#   }
-# }
