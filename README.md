@@ -35,18 +35,18 @@ terraform {
 module "aws_org" {
   source = "github.com/Coalfire-CF/terraform-aws-organization"
   service_access_principals = [
+    "backup.amazonaws.com",
+    "config.amazonaws.com",
     "cloudtrail.amazonaws.com",
-    "member.org.stacksets.cloudformation.amazonaws.com",
-    "sso.amazonaws.com",
-    "ssm.amazonaws.com",
-    "servicecatalog.amazonaws.com",
     "guardduty.amazonaws.com",
     "malware-protection.guardduty.amazonaws.com",
-    "securityhub.amazonaws.com",
+    "member.org.stacksets.cloudformation.amazonaws.com",
     "ram.amazonaws.com",
-    "tagpolicies.tag.amazonaws.com",
-    "config.amazonaws.com",
-    "backup.amazonaws.com"
+    "securityhub.amazonaws.com",
+    "servicecatalog.amazonaws.com",
+    "ssm.amazonaws.com",
+    "sso.amazonaws.com",
+    "tagpolicies.tag.amazonaws.com"
   ]
   
   org_account_name      = "${var.resource_prefix}-org-root"
@@ -318,7 +318,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_account_setup"></a> [account\_setup](#module\_account\_setup) | git::https://github.com/Coalfire-CF/terraform-aws-account-setup | v0.0.42 |
+| <a name="module_account_setup"></a> [account\_setup](#module\_account\_setup) | github.com/Coalfire-CF/terraform-aws-account-setup | v0.0.42 |
 
 ## Resources
 
@@ -423,32 +423,3 @@ No requirements.
 ### Copyright
 
 Copyright © 2023 Coalfire Systems Inc.
-## Tree
-```
-.
-|-- CONTRIBUTING.md
-|-- LICENSE
-|-- License.md
-|-- README.md
-|-- account-setup.tf
-|-- available-SCPs
-|   |-- DenyLeaveOrg.tf
-|   |-- S3_public_access_block.tf
-|   |-- aws_region_lock.tf
-|   |-- deny-resource-creation-without-tags.tf
-|   |-- disable_use_of_instance_types.tf
-|   |-- mfa_required_changes.tf
-|   |-- prevent_aws_iam_changes.tf
-|   |-- prevent_changes_to_cloudtrail.tf
-|   |-- prevent_changes_to_guardduty.tf
-|   |-- prevent_vpcflowlog_deletion.tf
-|-- cloudtrail.tf
-|-- coalfire_logo.png
-|-- data.tf
-|-- iam.tf
-|-- org.tf
-|-- outputs.tf
-|-- release-please-config.json
-|-- update-readme-tree.sh
-|-- variables.tf
-```
