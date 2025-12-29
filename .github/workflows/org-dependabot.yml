@@ -1,0 +1,18 @@
+name: Refresh dependabot on PR
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    uses: Coalfire-CF/Actions/.github/workflows/org-dependabot.yml@v0.1.0
+    with:
+      head_branch: ${{ github.head_ref || github.ref_name }}  # PR head, or current branch if not a PR
+      include_github_actions: "true"
+      default_interval: "daily"
+      depb_path: ".github/dependabot.yml"
+      commit_message: "chore: refresh dependabot.yml & TF sources"

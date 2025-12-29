@@ -421,3 +421,32 @@ No requirements.
 ### Copyright
 
 Copyright © 2023 Coalfire Systems Inc.
+## Tree
+```
+.
+|-- CONTRIBUTING.md
+|-- LICENSE
+|-- License.md
+|-- README.md
+|-- account-setup.tf
+|-- available-SCPs
+|   |-- DenyLeaveOrg.tf
+|   |-- S3_public_access_block.tf
+|   |-- aws_region_lock.tf
+|   |-- deny-resource-creation-without-tags.tf
+|   |-- disable_use_of_instance_types.tf
+|   |-- mfa_required_changes.tf
+|   |-- prevent_aws_iam_changes.tf
+|   |-- prevent_changes_to_cloudtrail.tf
+|   |-- prevent_changes_to_guardduty.tf
+|   |-- prevent_vpcflowlog_deletion.tf
+|-- cloudtrail.tf
+|-- coalfire_logo.png
+|-- data.tf
+|-- iam.tf
+|-- org.tf
+|-- outputs.tf
+|-- release-please-config.json
+|-- update-readme-tree.sh
+|-- variables.tf
+```
