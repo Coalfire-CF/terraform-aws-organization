@@ -9,7 +9,7 @@ output "master_account_id" {
 }
 
 output "org_id" {
-  value = aws_organizations_organization.org.id
+  value       = aws_organizations_organization.org.id
   description = "Organization ID"
 }
 
@@ -189,7 +189,7 @@ output "eks_node_role_name" {
 }
 
 output "cloudtrail_arn" {
-  value = aws_cloudtrail.org-trail[0].arn
+  value = try(aws_cloudtrail.org-trail[0].arn, null)
 }
 
 output "s3_cloudtrail_bucket_name" {

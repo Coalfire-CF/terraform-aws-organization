@@ -1,0 +1,29 @@
+name: Terraform fmt
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "**.tf"
+      - "**.tfvars"
+      - "**.hcl"
+      - ".terraform.lock.hcl"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "**.tf"
+      - "**.tfvars"
+      - "**.hcl"
+      - ".terraform.lock.hcl"
+
+jobs:
+  terraform-docs:
+    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-fmt.yml@v0.1.1
+    with:
+      terraform_version: "1.13.3"

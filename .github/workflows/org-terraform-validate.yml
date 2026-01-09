@@ -1,4 +1,4 @@
-name: Org Checkov
+name: Org Terraform Validate
 
 permissions:
   contents: write
@@ -6,8 +6,8 @@ permissions:
 
 on:
   pull_request:
-    branches:
-      - "**"
+    types:
+      - opened
     paths:
       - "**.tf"
       - "**.tfvars"
@@ -15,7 +15,8 @@ on:
       - ".terraform.lock.hcl"
       - "**/terraform/**"
 
-  workflow_call:
 jobs:
-  checkov-scan:
-    uses: Coalfire-CF/Actions/.github/workflows/org-checkov.yml@v0.1.0
+  create-release:
+    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-validate.yml@v0.1.1
+    with:
+      terraform_version: "1.13.3"
