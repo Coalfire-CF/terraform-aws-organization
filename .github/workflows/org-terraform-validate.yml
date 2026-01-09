@@ -17,6 +17,6 @@ on:
 
 jobs:
   create-release:
-    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-validate.yml@v0.1.0
+    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-validate.yml@v0.1.1
     with:
       terraform_version: "1.13.3"

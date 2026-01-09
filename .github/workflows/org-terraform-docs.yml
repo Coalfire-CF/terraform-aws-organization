@@ -16,4 +16,4 @@ on:
 
 jobs:
   terraform-docs:
-    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-docs.yml@v0.1.0
+    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-docs.yml@v0.1.1

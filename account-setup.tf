@@ -19,7 +19,7 @@ module "account_setup" {
   organization_id = var.organization_id
 
   # Keep the necessary KMS keys but disable others to simplify
-  create_s3_kms_key     = true
+  create_s3_kms_key = true
   # create_dynamo_kms_key = true
   create_ebs_kms_key    = false
   create_sns_kms_key    = false
