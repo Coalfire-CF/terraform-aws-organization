@@ -24,6 +24,6 @@ on:
 
 jobs:
   terraform-docs:
-    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-fmt.yml@v0.1.1
+    uses: Coalfire-CF/Actions/.github/workflows/org-terraform-fmt.yml@v0.1.0
     with:
       terraform_version: "1.13.3"
