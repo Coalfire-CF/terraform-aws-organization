@@ -14,4 +14,4 @@ on:
 
 jobs:
   create-release:
-    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.1.1
+    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.1.0
