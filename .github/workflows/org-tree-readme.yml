@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   readme-tree:
-    uses: Coalfire-CF/Actions/.github/workflows/org-tree-readme.yml@v0.1.0
+    uses: Coalfire-CF/Actions/.github/workflows/org-tree-readme.yml@v0.1.1
     with:
       commit_message: "chore: update README tree"
       exclude_pattern: ".git|node_modules|.github|dist|build"
