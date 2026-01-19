@@ -16,7 +16,7 @@
 # =============================================================================
 # The CoalForge team manages all CI/CD workflows and GitHub Actions.
 # Changes to automation should be reviewed by the platform team.
-/.github/workflows/     @Coalfire-CF/CoalForge
+/.github/workflows/     @Coalfire-CF/cs-coalforge
 
 # =============================================================================
 # LICENSE & LEGAL
