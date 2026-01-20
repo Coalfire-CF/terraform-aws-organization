@@ -1,3 +1,27 @@
-# These owners will be the default owners for everything in the repo. Unless a later match takes precedence
+# CODEOWNERS - Defines who must review and approve PRs for specific files/paths
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# IMPORTANT: Rules are evaluated top-to-bottom, and the LAST matching pattern takes precedence.
+# This means more specific rules should be placed AFTER general rules.
 
-* @Coalfire-CF/CS-AWS-Codeowners @Coalfire-CF/aws-pak-owners
+# =============================================================================
+# DEFAULT OWNERS
+# =============================================================================
+# The PAK (Product Area Knowledge) team and Cloud Codeowners own all files by default.
+# Any PR that doesn't match a more specific rule below will require their review.
+*                       @Coalfire-CF/aws-pak-owners @Coalfire-CF/CS-AWS-Codeowners
+
+# =============================================================================
+# GITHUB WORKFLOWS & ACTIONS
+# =============================================================================
+# The CoalForge team manages all CI/CD workflows and GitHub Actions.
+# Changes to automation should be reviewed by the platform team.
+/.github/workflows/     @Coalfire-CF/cs-coalforge
+
+# =============================================================================
+# LICENSE & LEGAL
+# =============================================================================
+# License changes require department head approval due to legal implications.
+# This ensures proper oversight for any licensing modifications.
+LICENSE                 @douglas-f
+
