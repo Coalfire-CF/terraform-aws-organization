@@ -429,7 +429,6 @@ Copyright © 2023 Coalfire Systems Inc.
 .
 |-- CONTRIBUTING.md
 |-- LICENSE
-|-- License.md
 |-- README.md
 |-- account-setup.tf
 |-- available-SCPs
@@ -450,6 +449,5 @@ Copyright © 2023 Coalfire Systems Inc.
 |-- org.tf
 |-- outputs.tf
 |-- release-please-config.json
-|-- update-readme-tree.sh
 |-- variables.tf
 ```
