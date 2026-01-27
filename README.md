@@ -144,6 +144,8 @@ EOF
 }
 ```
 
+NOTE: This resource must be commented out on the first run of your terraform plan/apply of aws-org since it will throw an error that an organization is required for this to be created ("Your account is not a member of an organization"). Once you run the first apply and obtain the organization_id, you can add this back in for the second round of terraform apply. 
+
 ## Service Control Policy Usage
 
 Included in the [available-SCPs](file://available-SCPs) directory are a set of commonly used Service Control Policies,
@@ -283,7 +285,7 @@ SSO-based authentication (via IAM Identity Center SSO):
 
 5. After the deployment has succeeded, uncomment the contents of 'remote-state.tf' and remove the terraform local code block.
 
-6. Follow the directions on the example 'auto.tfvars' previously provided to create cloudtrail and update policies. You will need to update 'create_org_cloudtrail' and 'is_organization' to 'true' while uncommenting and adding 'organization_id' value.
+6. Follow the directions on the example 'auto.tfvars' previously provided to create cloudtrail and update policies. You will need to update 'create_org_cloudtrail' and 'is_organization' to 'true' while uncommenting and adding 'organization_id' value. You can also add in the Delegate Admin Policy resource now too.
 
 7. Create an execution plan and verify the resources being created:
    ```hcl
@@ -424,6 +426,7 @@ No requirements.
 ### Copyright
 
 Copyright © 2023 Coalfire Systems Inc.
+
 ## Tree
 ```
 .
