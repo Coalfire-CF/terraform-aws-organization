@@ -7,7 +7,9 @@ permissions:
   actions: read
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
@@ -15,3 +17,4 @@ jobs:
   create-release:
     uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.3.2
     secrets: inherit
+    
