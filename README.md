@@ -321,7 +321,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_account_setup"></a> [account\_setup](#module\_account\_setup) | git::https://github.com/Coalfire-CF/terraform-aws-account-setup | v0.0.42 |
+| <a name="module_account_setup"></a> [account\_setup](#module\_account\_setup) | git::https://github.com/Coalfire-CF/terraform-aws-account-setup | v0.2.4 |
 
 ## Resources
 
@@ -342,6 +342,7 @@ No requirements.
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_number"></a> [account\_number](#input\_account\_number) | The AWS account number resources are being deployed into | `string` | n/a | yes |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | n/a | `string` | n/a | yes |
+| <a name="input_config_cross_account_ids"></a> [config\_cross\_account\_ids](#input\_config\_cross\_account\_ids) | AWS account IDs allowed cross-account access to the Config bucket | `list(string)` | `[]` | no |
 | <a name="input_create_cloudtrail"></a> [create\_cloudtrail](#input\_create\_cloudtrail) | Whether or not to create cloudtrail resources | `bool` | n/a | yes |
 | <a name="input_create_org_cloudtrail"></a> [create\_org\_cloudtrail](#input\_create\_org\_cloudtrail) | True/False statement whether to enable AWS Cloudtrail in the Organization | `bool` | n/a | yes |
 | <a name="input_default_aws_region"></a> [default\_aws\_region](#input\_default\_aws\_region) | The default AWS region to create resources in | `string` | n/a | yes |

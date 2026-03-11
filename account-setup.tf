@@ -1,5 +1,5 @@
 module "account_setup" {
-  source = "git::https://github.com/Coalfire-CF/terraform-aws-account-setup?ref=v0.0.42"
+  source = "git::https://github.com/Coalfire-CF/terraform-aws-account-setup?ref=v0.2.4"
 
   aws_region         = var.aws_region
   default_aws_region = var.default_aws_region
@@ -17,6 +17,8 @@ module "account_setup" {
   # Set to false initially as organization doesn't exist yet
   is_organization = var.is_organization
   organization_id = var.organization_id
+
+  config_cross_account_ids = var.config_cross_account_ids
 
   # Keep the necessary KMS keys but disable others to simplify
   create_s3_kms_key = true
