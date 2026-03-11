@@ -70,3 +70,9 @@ variable "enabled_policy_types" {
   type        = list(string)
   default     = [""]
 }
+
+variable "config_cross_account_ids" {
+  description = "AWS account IDs allowed cross-account access to the Config bucket"
+  type        = list(string)
+  default     = []
+}
