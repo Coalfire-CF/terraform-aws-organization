@@ -15,6 +15,6 @@ on:
 
 jobs:
   create-release:
-    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.3.2
+    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.4.1
     secrets: inherit
     
