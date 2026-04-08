@@ -4,7 +4,6 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
-  actions: read
 
 on:
   pull_request:
@@ -15,6 +14,4 @@ on:
 
 jobs:
   create-release:
-    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.4.1
-    secrets: inherit
-    
+    uses: Coalfire-CF/Actions/.github/workflows/org-release.yml@v0.1.0
