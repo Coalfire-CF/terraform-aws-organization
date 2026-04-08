@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Get Checkout Token
         id: checkout-token
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.COALFIRE_BOT_USER_APP_CLIENT_ID }}
           private-key: ${{ secrets.COALFIRE_BOT_USER_APP_PRIVATE_KEY }}
