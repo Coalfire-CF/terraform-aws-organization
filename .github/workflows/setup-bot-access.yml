@@ -27,7 +27,7 @@ jobs:
           
       - name: Add bot as external collaborator
         id: invite-bot
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ steps.checkout-token.outputs.token }}
           script: |
@@ -66,7 +66,7 @@ jobs:
 
       - name: Accept invitation as bot
         if: steps.invite-bot.outputs.invitation-sent == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.COALFIRE_BOT_USER_CLASSIC_PAT}}
           script: |
@@ -117,7 +117,7 @@ jobs:
             }
 
       - name: Verify bot access
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ steps.checkout-token.outputs.token }}
           script: |
