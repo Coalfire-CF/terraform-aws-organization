@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "DenyBurstableEC2" {
     actions   = ["ec2:RunInstances"]
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "ec2:InstanceType"
       values   = ["t2*", "t3*", "t4*"]
     }
