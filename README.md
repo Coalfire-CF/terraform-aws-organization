@@ -453,6 +453,15 @@ Copyright © 2023 Coalfire Systems Inc.
 |-- cloudtrail.tf
 |-- coalfire_logo.png
 |-- data.tf
+|-- example
+|   |-- for-delegated-admin
+|       |-- client.auto.tfvars
+|       |-- locals.tf
+|       |-- main.tf
+|       |-- outputs.tf
+|       |-- providers.tf
+|       |-- remote-data.tf
+|       |-- variables.tf
 |-- iam.tf
 |-- org.tf
 |-- outputs.tf
