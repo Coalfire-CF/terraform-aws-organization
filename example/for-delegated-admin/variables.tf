@@ -13,11 +13,6 @@ variable "default_aws_region" {
   type        = string
 }
 
-# variable "account_number" {
-#   description = "The AWS account number resources are being deployed into"
-#   type        = string
-# }
-
 variable "resource_prefix" {
   description = "The prefix for resources"
   type        = string
