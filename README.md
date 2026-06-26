@@ -67,8 +67,11 @@ module "aws_org" {
 For org deployments where a delegated admin is required/needed:
 ```
 module "org" {
-  ## update source once branch is merged into main
-  source = "git::https://github.com/Coalfire-CF/terraform-aws-organization.git?ref=fa-aws-pakpt-update"
+  source = "git::https://github.com/Coalfire-CF/terraform-aws-organization.git?ref=vx.x.x"
+
+  providers = {
+    aws = aws.root
+  }
 
   service_access_principals = [
     "backup.amazonaws.com",
@@ -93,13 +96,13 @@ module "org" {
   default_aws_region    = var.default_aws_region
   resource_prefix       = var.resource_prefix
 
-  account_number    = var.account_number
+  account_number    = local.root_account_id
   create_cloudtrail = var.create_cloudtrail
   is_organization   = var.is_organization
   organization_id   = var.organization_id
 }
 
-## Full Delegate Admin Policy ##
+## Full Delegate Admin Policy - needed for GuardDuty, Config, Security Hub ##
 resource "aws_organizations_resource_policy" "admin_delegate" {
 
   content = <<EOF
@@ -110,7 +113,7 @@ resource "aws_organizations_resource_policy" "admin_delegate" {
       "Sid": "DelegatingAdmin",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:${local.partition}:iam::${local.mgmt_plane_account_id}:root"
+        "AWS": "arn:${local.partition}:iam::${local.mgmt_account_id}:root"
       },
       "Action": [
         "organizations:CreatePolicy",
@@ -450,6 +453,15 @@ Copyright © 2023 Coalfire Systems Inc.
 |-- cloudtrail.tf
 |-- coalfire_logo.png
 |-- data.tf
+|-- example
+|   |-- for-delegated-admin
+|       |-- client.auto.tfvars
+|       |-- locals.tf
+|       |-- main.tf
+|       |-- outputs.tf
+|       |-- providers.tf
+|       |-- remote-data.tf
+|       |-- variables.tf
 |-- iam.tf
 |-- org.tf
 |-- outputs.tf
